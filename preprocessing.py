@@ -1,20 +1,57 @@
-import pandas as pd
-import numpy as np
+"""
+File: preprocessing.py
+
+Description:
+    Tiền xử lý dữ liệu Google Play Store.
+
+    Chức năng:
+    - Đọc dữ liệu
+    - Kiểm tra dữ liệu
+    - Xóa dòng dữ liệu lỗi
+    - Làm sạch Reviews
+    - Làm sạch Installs
+    - Làm sạch Price
+    - Làm sạch Size
+    - Xử lý Missing Values
+    - Xóa dữ liệu trùng lặp
+    - Lưu dữ liệu đã làm sạch
+
+Input:
+    data/raw/googleplaystore.csv
+
+Output:
+    data/processed/googleplaystore_cleaned.csv
+
+Authors:
+    - Nguyễn Hữu Đoàn
+
+Project:
+    AI Rating Predictor
+"""
+
 from pathlib import Path
+import numpy as np
+import pandas as pd
 
 # ==================================================
 # CẤU HÌNH ĐƯỜNG DẪN
 # ==================================================
-
 DATA_DIR = Path("data")
-INPUT_FILE = DATA_DIR / "googleplaystore.csv"
-OUTPUT_FILE = DATA_DIR / "googleplaystore_cleaned.csv"
 
+RAW_DIR = DATA_DIR / "raw"
+
+PROCESSED_DIR = DATA_DIR / "processed"
+
+INPUT_FILE = RAW_DIR / "googleplaystore.csv"
+
+OUTPUT_FILE = PROCESSED_DIR / "googleplaystore_cleaned.csv"
+
+# Tạo thư mục processed nếu chưa tồn tại
+PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 # ==================================================
 # ĐỌC DỮ LIỆU
 # ==================================================
-
 def load_data(file_path: Path) -> pd.DataFrame:
     """
     Đọc dữ liệu từ file CSV.
@@ -49,11 +86,9 @@ def load_data(file_path: Path) -> pd.DataFrame:
         print(f"Lỗi khi đọc dữ liệu: {error}")
         raise
 
-
 # ==================================================
 # KIỂM TRA DỮ LIỆU
 # ==================================================
-
 def inspect_data(df: pd.DataFrame) -> None:
     """
     Hiển thị thông tin tổng quan của dữ liệu.
@@ -78,11 +113,9 @@ def inspect_data(df: pd.DataFrame) -> None:
     print("\n5 dòng đầu:")
     print(df.head())
 
-
 # ==================================================
 # XÓA DỮ LIỆU LỖI
 # ==================================================
-
 def remove_invalid_rows(df: pd.DataFrame) -> pd.DataFrame:
     """
     Xóa dòng dữ liệu bị lỗi trong bộ Google Play Store.
@@ -98,11 +131,9 @@ def remove_invalid_rows(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-
 # ==================================================
 # LÀM SẠCH REVIEWS
 # ==================================================
-
 def clean_reviews(df: pd.DataFrame) -> pd.DataFrame:
     """
     Chuyển cột Reviews sang kiểu số.
@@ -113,6 +144,8 @@ def clean_reviews(df: pd.DataFrame) -> pd.DataFrame:
         errors="coerce"
     )
 
+    print("Đã chuyển Reviews sang kiểu số.")
+    
     return df
 
 
@@ -137,14 +170,13 @@ def clean_installs(df: pd.DataFrame) -> pd.DataFrame:
         df["Installs"],
         errors="coerce"
     )
-
+    print("Đã làm sạch Installs.")
+    
     return df
-
 
 # ==================================================
 # LÀM SẠCH PRICE
 # ==================================================
-
 def clean_price(df: pd.DataFrame) -> pd.DataFrame:
     """
     Chuyển cột Price sang kiểu số thực.
@@ -161,14 +193,12 @@ def clean_price(df: pd.DataFrame) -> pd.DataFrame:
         df["Price"],
         errors="coerce"
     )
-
+    print("Đã làm sạch Price.")
     return df
-
 
 # ==================================================
 # LÀM SẠCH SIZE
 # ==================================================
-
 def convert_size(size: str) -> float:
     """
     Chuyển đổi cột Size về đơn vị MB.
@@ -187,37 +217,59 @@ def convert_size(size: str) -> float:
     if size == "Varies with device":
         return np.nan
 
-    if size.endswith("M"):
-        return float(size[:-1])
+    try:
+        
+        size = size.replace(",", ".")
+        
+        if size.endswith("M"):
+            return float(size[:-1])
 
-    if size.endswith("k"):
-        return float(size[:-1]) / 1000
+        if size.endswith("k"):
+            return float(size[:-1]) / 1000
+
+    except ValueError:
+        return np.nan
 
     return np.nan
 
+# ==================================================
+# LÀM SẠCH SIZE
+# ==================================================
 
 def clean_size(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Làm sạch cột Size.
+    Chuyển cột Size về đơn vị MB.
     """
 
+    df["Size"] = df["Size"].astype(str).str.strip()
     df["Size"] = df["Size"].apply(convert_size)
 
+    print("Đã làm sạch Size.")
     return df
-
 
 # ==================================================
 # XỬ LÝ GIÁ TRỊ THIẾU
 # ==================================================
-
 def remove_missing_values(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Xóa các dòng chứa giá trị thiếu.
+    Xóa các dòng chứa giá trị thiếu ở những cột quan trọng.
     """
 
     before = len(df)
 
-    df = df.dropna()
+    df = df.dropna(
+        subset=[
+            "Rating",
+            "Type",
+            "Content Rating",
+            "Current Ver",
+            "Android Ver",
+            "Reviews",
+            "Installs",
+            "Price",
+            "Size",
+        ]
+    )
 
     after = len(df)
 
@@ -225,11 +277,9 @@ def remove_missing_values(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-
 # ==================================================
 # XÓA DỮ LIỆU TRÙNG LẶP
 # ==================================================
-
 def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
     """
     Xóa các ứng dụng bị trùng tên.
@@ -237,7 +287,10 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
 
     before = len(df)
 
-    df = df.drop_duplicates(subset=["App"])
+    df = df.drop_duplicates(
+    subset=["App"],
+    keep="first"
+    )
 
     after = len(df)
 
@@ -245,18 +298,24 @@ def remove_duplicates(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-
 # ==================================================
 # LƯU DỮ LIỆU
 # ==================================================
-
 def save_data(df: pd.DataFrame, output_path: Path) -> None:
     """
     Lưu dữ liệu đã làm sạch ra file CSV.
     """
 
     try:
-        df.to_csv(output_path, index=False)
+        output_path.parent.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+        df.to_csv(
+            output_path,
+            index=False,
+            encoding="utf-8-sig"
+        )
 
         print("\n" + "=" * 60)
         print("LƯU DỮ LIỆU")
@@ -267,16 +326,13 @@ def save_data(df: pd.DataFrame, output_path: Path) -> None:
         print(f"Lỗi khi lưu file: {error}")
         raise
 
-
 # ==================================================
 # HÀM CHÍNH
 # ==================================================
-
 def main() -> None:
     """
     Điều khiển toàn bộ quy trình tiền xử lý dữ liệu.
     """
-
     df = load_data(INPUT_FILE)
 
     inspect_data(df)
