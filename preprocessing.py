@@ -23,7 +23,7 @@ Output:
     data/processed/googleplaystore_cleaned.csv
 
 Authors:
-    - Nguyễn Hữu Đoàn
+    - Nguyễn Hữu Đoàn -
 
 Project:
     AI Rating Predictor
