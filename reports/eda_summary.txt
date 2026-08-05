@@ -1,0 +1,137 @@
+============================================================
+BÁO CÁO TỔNG QUAN EDA
+============================================================
+
+Rows    : 7023
+Cột : 21
+
+Cột
+----------------------------------------
+App
+Category
+Rating
+Reviews
+Size
+Installs
+Type
+Price
+Content Rating
+Genres
+Last Updated
+Current Ver
+Android Ver
+Avg_Compound
+Avg_Positive
+Avg_Neutral
+Avg_Negative
+Positive_Count
+Neutral_Count
+Negative_Count
+Total_Reviews
+
+Các kiểu dữ liệu
+----------------------------------------
+App                   str
+Category              str
+Rating            float64
+Reviews             int64
+Size              float64
+Installs            int64
+Type                  str
+Price             float64
+Content Rating        str
+Genres                str
+Last Updated          str
+Current Ver           str
+Android Ver           str
+Avg_Compound      float64
+Avg_Positive      float64
+Avg_Neutral       float64
+Avg_Negative      float64
+Positive_Count    float64
+Neutral_Count     float64
+Negative_Count    float64
+Total_Reviews     float64
+
+Giá trị bị thiếu
+----------------------------------------
+                Missing Count  Missing Percent
+App                         0              0.0
+Category                    0              0.0
+Rating                      0              0.0
+Reviews                     0              0.0
+Size                        0              0.0
+Installs                    0              0.0
+Type                        0              0.0
+Price                       0              0.0
+Content Rating              0              0.0
+Genres                      0              0.0
+Last Updated                0              0.0
+Current Ver                 0              0.0
+Android Ver                 0              0.0
+Avg_Compound                0              0.0
+Avg_Positive                0              0.0
+Avg_Neutral                 0              0.0
+Avg_Negative                0              0.0
+Positive_Count              0              0.0
+Neutral_Count               0              0.0
+Negative_Count              0              0.0
+Total_Reviews               0              0.0
+
+Các hàng trùng lặp: 0
+
+Thống kê mô tả
+----------------------------------------
+                                                   App Category       Rating       Reviews         Size      Installs  Type        Price Content Rating Genres    Last Updated Current Ver Android Ver  Avg_Compound  Avg_Positive  Avg_Neutral  Avg_Negative  Positive_Count  Neutral_Count  Negative_Count  Total_Reviews
+count                                             7023     7023  7023.000000  7.023000e+03  7023.000000  7.023000e+03  7023  7023.000000           7023   7023            7023        7023        7023   7023.000000   7023.000000  7023.000000   7023.000000     7023.000000    7023.000000     7023.000000    7023.000000
+unique                                            7023       33          NaN           NaN          NaN           NaN     2          NaN              6    111            1278        2509          31           NaN           NaN          NaN           NaN             NaN            NaN             NaN            NaN
+top     Photo Editor & Candy Camera & Grid & ScrapBook   FAMILY          NaN           NaN          NaN           NaN  Free          NaN       Everyone  Tools  August 3, 2018         1.0  4.1 and up           NaN           NaN          NaN           NaN             NaN            NaN             NaN            NaN
+freq                                                 1     1511          NaN           NaN          NaN           NaN  6484          NaN           5678    626             171         449        1717           NaN           NaN          NaN           NaN             NaN            NaN             NaN            NaN
+mean                                               NaN      NaN     4.160857  1.448921e+05    21.762559  4.472096e+06   NaN     1.173887            NaN    NaN             NaN         NaN         NaN      0.028584      0.027759     0.046119      0.007125        2.372775       0.399829        0.659547       3.432152
+std                                                NaN      NaN     0.559246  1.024282e+06    22.729972  2.714533e+07   NaN    18.202773            NaN    NaN             NaN         NaN         NaN      0.113179      0.101909     0.159144      0.028784       10.976504       1.945032        3.769773      15.285908
+min                                                NaN      NaN     1.000000  1.000000e+00     0.008500  1.000000e+00   NaN     0.000000            NaN    NaN             NaN         NaN         NaN     -0.659700      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
+25%                                                NaN      NaN     4.000000  8.400000e+01     4.900000  1.000000e+04   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.000000      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
+50%                                                NaN      NaN     4.300000  1.550000e+03    13.000000  1.000000e+05   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.000000      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
+75%                                                NaN      NaN     4.500000  2.662500e+04    31.000000  1.000000e+06   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.000000      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
+max                                                NaN      NaN     5.000000  4.489172e+07   100.000000  1.000000e+09   NaN   400.000000            NaN    NaN             NaN         NaN         NaN      0.981100      1.000000     1.000000      0.574000      234.000000      39.000000      126.000000     273.000000
+
+============================================================
+
+============================================================
+PHÂN TÍCH CHIẾN LƯỢC GIÁ
+============================================================
+Hệ số tương quan (Giá vs Xếp hạng): -0.0212
+
+Average Rating (Free): 4.15
+Đánh giá trung bình (Trả phí): 4.24
+
+
+============================================================
+PHÂN TÍCH CHIẾN LƯỢC GIÁ
+============================================================
+
+Hệ số tương quan (Giá - Xếp hạng): -0.0212
+
+Các ứng dụng trả phí nhận được đánh giá trung bình cao hơn.
+
+
+Thông tin dành cho nhà phát triển
+------------------------------
+Average Rating (Free): 4.15
+Average Rating (Paid): 4.24
+
+Average Installs (Free): 4,837,333
+Average Installs (Paid): 78,419
+
+Các ứng dụng trả phí nhận được đánh giá của người dùng cao hơn.
+
+
+Khuyến nghị dành cho Admin
+------------------------------
+- Theo dõi xếp hạng thường xuyên.
+- Cải thiện trải nghiệm người dùng.
+- Khuyến khích đánh giá tích cực.
+- Tối ưu hóa chiến lược giá.
+- Theo dõi điểm cảm xúc theo thời gian.
+
+ KẾT THÚC BÁO CÁO
