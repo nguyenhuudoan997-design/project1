@@ -38,4 +38,4 @@ Biểu đồ được lưu tại thư mục reports/figures.
 Tầm quan trọng của tính năng được lưu tại reports/feature_importance.csv
 
 ----------------------------------------
-Thời gian chạy: 2.46 giây
+Thời gian chạy: 3.27 giây
