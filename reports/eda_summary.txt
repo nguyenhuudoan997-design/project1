@@ -3,7 +3,7 @@ BÁO CÁO TỔNG QUAN EDA
 ============================================================
 
 Rows    : 7023
-Cột : 21
+Cột : 22
 
 Cột
 ----------------------------------------
@@ -24,6 +24,7 @@ Avg_Compound
 Avg_Positive
 Avg_Neutral
 Avg_Negative
+Sentiment
 Positive_Count
 Neutral_Count
 Negative_Count
@@ -48,6 +49,7 @@ Avg_Compound      float64
 Avg_Positive      float64
 Avg_Neutral       float64
 Avg_Negative      float64
+Sentiment             str
 Positive_Count    float64
 Neutral_Count     float64
 Negative_Count    float64
@@ -69,31 +71,32 @@ Genres                      0              0.0
 Last Updated                0              0.0
 Current Ver                 0              0.0
 Android Ver                 0              0.0
-Avg_Compound                0              0.0
-Avg_Positive                0              0.0
-Avg_Neutral                 0              0.0
-Avg_Negative                0              0.0
-Positive_Count              0              0.0
-Neutral_Count               0              0.0
-Negative_Count              0              0.0
-Total_Reviews               0              0.0
+Avg_Compound             6454             91.9
+Avg_Positive             6454             91.9
+Avg_Neutral              6454             91.9
+Avg_Negative             6454             91.9
+Sentiment                   0              0.0
+Positive_Count           6454             91.9
+Neutral_Count            6454             91.9
+Negative_Count           6454             91.9
+Total_Reviews            6454             91.9
 
 Các hàng trùng lặp: 0
 
 Thống kê mô tả
 ----------------------------------------
-                                                   App Category       Rating       Reviews         Size      Installs  Type        Price Content Rating Genres    Last Updated Current Ver Android Ver  Avg_Compound  Avg_Positive  Avg_Neutral  Avg_Negative  Positive_Count  Neutral_Count  Negative_Count  Total_Reviews
-count                                             7023     7023  7023.000000  7.023000e+03  7023.000000  7.023000e+03  7023  7023.000000           7023   7023            7023        7023        7023   7023.000000   7023.000000  7023.000000   7023.000000     7023.000000    7023.000000     7023.000000    7023.000000
-unique                                            7023       33          NaN           NaN          NaN           NaN     2          NaN              6    111            1278        2509          31           NaN           NaN          NaN           NaN             NaN            NaN             NaN            NaN
-top     Photo Editor & Candy Camera & Grid & ScrapBook   FAMILY          NaN           NaN          NaN           NaN  Free          NaN       Everyone  Tools  August 3, 2018         1.0  4.1 and up           NaN           NaN          NaN           NaN             NaN            NaN             NaN            NaN
-freq                                                 1     1511          NaN           NaN          NaN           NaN  6484          NaN           5678    626             171         449        1717           NaN           NaN          NaN           NaN             NaN            NaN             NaN            NaN
-mean                                               NaN      NaN     4.160857  1.448921e+05    21.762559  4.472096e+06   NaN     1.173887            NaN    NaN             NaN         NaN         NaN      0.028584      0.027759     0.046119      0.007125        2.372775       0.399829        0.659547       3.432152
-std                                                NaN      NaN     0.559246  1.024282e+06    22.729972  2.714533e+07   NaN    18.202773            NaN    NaN             NaN         NaN         NaN      0.113179      0.101909     0.159144      0.028784       10.976504       1.945032        3.769773      15.285908
-min                                                NaN      NaN     1.000000  1.000000e+00     0.008500  1.000000e+00   NaN     0.000000            NaN    NaN             NaN         NaN         NaN     -0.659700      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
-25%                                                NaN      NaN     4.000000  8.400000e+01     4.900000  1.000000e+04   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.000000      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
-50%                                                NaN      NaN     4.300000  1.550000e+03    13.000000  1.000000e+05   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.000000      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
-75%                                                NaN      NaN     4.500000  2.662500e+04    31.000000  1.000000e+06   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.000000      0.000000     0.000000      0.000000        0.000000       0.000000        0.000000       0.000000
-max                                                NaN      NaN     5.000000  4.489172e+07   100.000000  1.000000e+09   NaN   400.000000            NaN    NaN             NaN         NaN         NaN      0.981100      1.000000     1.000000      0.574000      234.000000      39.000000      126.000000     273.000000
+                                                   App Category       Rating       Reviews         Size      Installs  Type        Price Content Rating Genres    Last Updated Current Ver Android Ver  Avg_Compound  Avg_Positive  Avg_Neutral  Avg_Negative Sentiment  Positive_Count  Neutral_Count  Negative_Count  Total_Reviews
+count                                             7023     7023  7023.000000  7.023000e+03  7023.000000  7.023000e+03  7023  7023.000000           7023   7023            7023        7023        7023    569.000000    569.000000   569.000000    569.000000      7023      569.000000     569.000000      569.000000     569.000000
+unique                                            7023       33          NaN           NaN          NaN           NaN     2          NaN              6    111            1278        2509          31           NaN           NaN          NaN           NaN         4             NaN            NaN             NaN            NaN
+top     Photo Editor & Candy Camera & Grid & ScrapBook   FAMILY          NaN           NaN          NaN           NaN  Free          NaN       Everyone  Tools  August 3, 2018         1.0  4.1 and up           NaN           NaN          NaN           NaN   Unknown             NaN            NaN             NaN            NaN
+freq                                                 1     1511          NaN           NaN          NaN           NaN  6484          NaN           5678    626             171         449        1717           NaN           NaN          NaN           NaN      6454             NaN            NaN             NaN            NaN
+mean                                               NaN      NaN     4.160857  1.448921e+05    21.762559  4.472096e+06   NaN     1.173887            NaN    NaN             NaN         NaN         NaN      0.352802      0.342618     0.569236      0.087937       NaN       29.286467       4.934974        8.140598      42.362039
+std                                                NaN      NaN     0.559246  1.024282e+06    22.729972  2.714533e+07   NaN    18.202773            NaN    NaN             NaN         NaN         NaN      0.209224      0.142567     0.121686      0.055890       NaN       26.455727       4.934535       10.708917      35.165289
+min                                                NaN      NaN     1.000000  1.000000e+00     0.008500  1.000000e+00   NaN     0.000000            NaN    NaN             NaN         NaN         NaN     -0.659700      0.000000     0.000000      0.000000       NaN        0.000000       0.000000        0.000000       1.000000
+25%                                                NaN      NaN     4.000000  8.400000e+01     4.900000  1.000000e+04   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.229019      0.244360     0.493684      0.049364       NaN       16.000000       1.000000        2.000000      28.000000
+50%                                                NaN      NaN     4.300000  1.550000e+03    13.000000  1.000000e+05   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.368688      0.322000     0.580256      0.084385       NaN       24.000000       4.000000        5.000000      36.000000
+75%                                                NaN      NaN     4.500000  2.662500e+04    31.000000  1.000000e+06   NaN     0.000000            NaN    NaN             NaN         NaN         NaN      0.497241      0.430238     0.647250      0.119205       NaN       32.000000       7.000000       10.000000      40.000000
+max                                                NaN      NaN     5.000000  4.489172e+07   100.000000  1.000000e+09   NaN   400.000000            NaN    NaN             NaN         NaN         NaN      0.981100      1.000000     1.000000      0.574000       NaN      234.000000      39.000000      126.000000     273.000000
 
 ============================================================
 
