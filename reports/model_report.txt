@@ -1,0 +1,41 @@
+============================================================
+BÁO CÁO ĐÁNH GIÁ MÔ HÌNH
+============================================================
+
+Mô hình
+----------------------------------------
+Bộ hồi quy rừng ngẫu nhiên
+
+Các chỉ số đánh giá
+----------------------------------------
+R2 Score            : 0.1239
+MAE                 : 0.3633
+MSE                 : 0.2664
+RMSE                : 0.5161
+Maximum Error       : 3.4290
+Minimum Error       : 0.0000
+Mean Error          : 0.3633
+Explained Variance  : 0.1242
+MAPE (%)            : 10.2595
+
+============================================================
+TÍNH QUAN TRỌNG HÀNG ĐẦU CỦA TÍNH NĂNG
+============================================================
+Reviews                                      0.288518
+Size                                         0.240657
+Installs                                     0.107263
+Price                                        0.022495
+Category_FAMILY                              0.011279
+Genres_Education                             0.011267
+Genres_Entertainment                         0.010755
+Content Rating_Everyone                      0.010107
+Genres_Tools                                 0.008883
+Avg_Compound                                 0.008698
+Kết luận
+----------------------------------------
+Mô hình cần được cải thiện thêm.
+Biểu đồ được lưu tại thư mục reports/figures.
+Tầm quan trọng của tính năng được lưu tại reports/feature_importance.csv
+
+----------------------------------------
+Thời gian chạy: 2.46 giây
