@@ -1,0 +1,546 @@
+/* =========================================================
+   LOGIN PAGE
+   AI Rating Predictor
+   ========================================================= */
+
+
+/* =========================================================
+   LOGIN PAGE BACKGROUND
+   ========================================================= */
+
+.auth-page {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+
+    background:
+        radial-gradient(
+            circle at top left,
+            rgba(37, 99, 235, 0.15),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(34, 197, 94, 0.10),
+            transparent 35%
+        ),
+        var(--background);
+}
+
+
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
+.auth-card {
+    width: 100%;
+    max-width: 460px;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    padding: 42px;
+
+    border-radius: 24px;
+
+    border: 1px solid rgba(226, 232, 240, 0.8);
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.12);
+
+    animation: loginCardAppear 0.5s ease;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.auth-header {
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.auth-logo {
+    width: 64px;
+    height: 64px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #4f46e5
+        );
+
+    color: white;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    box-shadow:
+        0 12px 25px rgba(37, 99, 235, 0.25);
+}
+
+
+.auth-header h1 {
+    margin-bottom: 8px;
+
+    font-family: "Poppins", sans-serif;
+
+    font-size: 28px;
+
+    font-weight: 700;
+
+    color: var(--text);
+}
+
+
+.auth-header p {
+    color: var(--gray);
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.auth-form {
+    width: 100%;
+}
+
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: var(--text);
+}
+
+
+/* =========================================================
+   LABEL + FORGOT PASSWORD
+   ========================================================= */
+
+.form-label-row {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 8px;
+}
+
+
+.form-label-row label {
+    margin-bottom: 0;
+}
+
+
+.forgot-password {
+    color: var(--primary);
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    transition: 0.3s;
+}
+
+
+.forgot-password:hover {
+    color: var(--primary-hover);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   INPUT WRAPPER
+   ========================================================= */
+
+.input-wrapper {
+    position: relative;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   INPUT ICON
+   ========================================================= */
+
+.input-icon {
+    position: absolute;
+
+    left: 15px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 17px;
+
+    color: var(--gray);
+
+    pointer-events: none;
+
+    z-index: 2;
+}
+
+
+/* =========================================================
+   LOGIN INPUT
+   ========================================================= */
+
+.input-wrapper .form-control {
+    margin: 0;
+
+    padding-left: 46px;
+
+    padding-right: 46px;
+
+    height: 52px;
+
+    border-radius: 12px;
+
+    background: #f8fafc;
+}
+
+
+.input-wrapper .form-control:focus {
+    background: white;
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+
+/* =========================================================
+   PASSWORD TOGGLE
+   ========================================================= */
+
+.password-toggle {
+    position: absolute;
+
+    right: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--gray);
+
+    cursor: pointer;
+
+    border-radius: 8px;
+
+    font-size: 16px;
+}
+
+
+.password-toggle:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   REMEMBER LOGIN
+   ========================================================= */
+
+.remember-row {
+    display: flex;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+}
+
+
+.remember-label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    color: var(--gray);
+}
+
+
+.remember-label input {
+    width: 16px;
+    height: 16px;
+
+    accent-color: var(--primary);
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.auth-submit {
+    width: 100%;
+
+    height: 52px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            #4f46e5
+        );
+
+    color: white;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 20px rgba(37, 99, 235, 0.20);
+
+    transition: 0.3s;
+}
+
+
+.auth-submit:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 25px rgba(37, 99, 235, 0.28);
+}
+
+
+.auth-submit:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   FLASH MESSAGE
+   ========================================================= */
+
+.auth-messages {
+    margin-bottom: 20px;
+}
+
+
+.auth-alert {
+    padding: 12px 15px;
+
+    border-radius: 10px;
+
+    font-size: 14px;
+
+    margin-bottom: 10px;
+}
+
+
+.auth-alert-success {
+    background: #dcfce7;
+
+    color: #15803d;
+
+    border: 1px solid #bbf7d0;
+}
+
+
+.auth-alert-danger,
+.auth-alert-error {
+    background: #fee2e2;
+
+    color: #b91c1c;
+
+    border: 1px solid #fecaca;
+}
+
+
+.auth-alert-warning {
+    background: #fef3c7;
+
+    color: #b45309;
+
+    border: 1px solid #fde68a;
+}
+
+
+.auth-alert-info {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    border: 1px solid #bfdbfe;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.auth-footer {
+    margin-top: 28px;
+
+    padding-top: 22px;
+
+    border-top: 1px solid var(--border);
+
+    text-align: center;
+}
+
+
+.auth-footer p {
+    color: var(--gray);
+
+    font-size: 14px;
+}
+
+
+.auth-footer a {
+    color: var(--primary);
+
+    font-weight: 600;
+
+    transition: 0.3s;
+}
+
+
+.auth-footer a:hover {
+    color: var(--primary-hover);
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes loginCardAppear {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(25px)
+            scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .auth-page {
+        padding: 25px 15px;
+    }
+
+
+    .auth-card {
+        padding: 32px 25px;
+
+        border-radius: 20px;
+    }
+
+
+    .auth-header h1 {
+        font-size: 24px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .auth-card {
+        padding: 28px 20px;
+    }
+
+
+    .auth-logo {
+        width: 56px;
+        height: 56px;
+
+        font-size: 19px;
+    }
+
+
+    .auth-header h1 {
+        font-size: 22px;
+    }
+
+
+    .form-label-row {
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .forgot-password {
+        font-size: 12px;
+    }
+
+}
