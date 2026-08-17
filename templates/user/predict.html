@@ -1,0 +1,221 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-cpu"></i>
+
+            AI Rating Predictor
+
+        </h2>
+
+        <p class="text-muted">
+
+            Enter application information to predict
+            its Rating.
+
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         PREDICTION FORM
+    ========================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-input-cursor-text"></i>
+
+                Application Information
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <form
+                method="POST"
+                action="{{ url_for('predict.predict') }}"
+            >
+
+                <div class="row g-4">
+
+
+                    <!-- Reviews -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Reviews
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="reviews"
+                            class="form-control"
+                            min="0"
+                            step="1"
+                            required
+                            placeholder="Example: 10000"
+                        >
+
+                        <small class="text-muted">
+
+                            Number of user reviews.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Installs -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Installs
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="installs"
+                            class="form-control"
+                            min="0"
+                            step="1"
+                            required
+                            placeholder="Example: 100000"
+                        >
+
+                        <small class="text-muted">
+
+                            Number of installations.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Price -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Price ($)
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="price"
+                            class="form-control"
+                            min="0"
+                            step="0.01"
+                            value="0"
+                            required
+                        >
+
+                        <small class="text-muted">
+
+                            Enter 0 for a free application.
+
+                        </small>
+
+                    </div>
+
+
+                    <!-- Size -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Size (MB)
+
+                        </label>
+
+                        <input
+                            type="number"
+                            name="size"
+                            class="form-control"
+                            min="0"
+                            step="0.1"
+                            required
+                            placeholder="Example: 20"
+                        >
+
+                        <small class="text-muted">
+
+                            Application size in MB.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     BUTTON
+                ========================== -->
+
+                <div class="d-flex justify-content-end mt-4">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary px-4">
+
+                        <i class="bi bi-magic"></i>
+
+                        Predict Rating
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         INFORMATION
+    ========================== -->
+
+    <div class="alert alert-info mt-4">
+
+        <i class="bi bi-info-circle"></i>
+
+        The AI model uses four features:
+
+        <strong>
+            Reviews, Installs, Price and Size.
+        </strong>
+
+    </div>
+
+</div>
+
+{% endblock %}

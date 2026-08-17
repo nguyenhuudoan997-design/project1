@@ -1,0 +1,235 @@
+<!-- ========================================= -->
+<!-- DASHBOARD STATISTICS -->
+<!-- ========================================= -->
+
+<div class="row g-4 mt-1">
+
+
+    <!-- ===================================== -->
+    <!-- TOTAL PREDICTIONS -->
+    <!-- ===================================== -->
+
+    <div class="col-xl-4 col-md-6">
+
+        <div class="card dashboard-stat-card prediction-stat-card
+                    border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <div class="stat-label">
+
+                            <i class="bi bi-bar-chart-line-fill me-1"></i>
+
+                            Tổng số dự đoán
+
+                        </div>
+
+
+                        <h2 class="stat-number text-primary">
+
+                            {{ total_prediction|default(0) }}
+
+                        </h2>
+
+
+                        <p class="stat-description">
+
+                            Tổng số lần hệ thống đã thực hiện dự đoán.
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="stat-icon stat-icon-primary">
+
+                        <i class="bi bi-bar-chart-fill"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+
+                    <span>
+
+                        <i class="bi bi-activity"></i>
+
+                        Hoạt động dự đoán
+
+                    </span>
+
+                    <span class="text-primary fw-semibold">
+
+                        Hoạt động
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- AVERAGE RATING -->
+    <!-- ===================================== -->
+
+    <div class="col-xl-4 col-md-6">
+
+        <div class="card dashboard-stat-card rating-stat-card
+                    border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <div class="stat-label">
+
+                            <i class="bi bi-star-fill me-1"></i>
+
+                            Xếp hạng trung bình
+
+                        </div>
+
+
+                        <h2 class="stat-number text-success">
+
+                            {{ average_rating|default(0) }}
+
+                            <small class="rating-max">
+
+                                / 5.0
+
+                            </small>
+
+                        </h2>
+
+
+                        <p class="stat-description">
+
+                            Điểm đánh giá trung bình từ các dự đoán.
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="stat-icon stat-icon-success">
+
+                        <i class="bi bi-star-fill"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+
+                    <span>
+
+                        <i class="bi bi-graph-up-arrow"></i>
+
+                        Đánh giá trung bình
+
+                    </span>
+
+                    <span class="text-success fw-semibold">
+
+                        ⭐ Đánh giá
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ===================================== -->
+    <!-- ACCURACY -->
+    <!-- ===================================== -->
+
+    <div class="col-xl-4 col-md-12">
+
+        <div class="card dashboard-stat-card accuracy-stat-card
+                    border-0 shadow-sm h-100">
+
+            <div class="card-body p-4">
+
+                <div class="d-flex justify-content-between align-items-start">
+
+                    <div>
+
+                        <div class="stat-label">
+
+                            <i class="bi bi-bullseye me-1"></i>
+
+                            Độ chính xác mô hình
+
+                        </div>
+
+
+                        <h2 class="stat-number text-warning">
+
+                            {{ accuracy|default(0) }}%
+
+                        </h2>
+
+
+                        <p class="stat-description">
+
+                            Mức độ chính xác của mô hình dự đoán.
+
+                        </p>
+
+                    </div>
+
+
+                    <div class="stat-icon stat-icon-warning">
+
+                        <i class="bi bi-bullseye"></i>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-footer">
+
+                    <span>
+
+                        <i class="bi bi-cpu-fill"></i>
+
+                        Mô hình AI
+
+                    </span>
+
+                    <span class="text-warning fw-semibold">
+
+                        Random Forest
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

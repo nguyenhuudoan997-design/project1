@@ -1,0 +1,373 @@
+<!-- ========================================= -->
+<!-- AI RATING PREDICTION -->
+<!-- ========================================= -->
+
+<div class="card border-0 shadow-lg prediction-card">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="card-header prediction-header text-white p-4">
+
+        <div class="d-flex align-items-center">
+
+            <div class="prediction-icon me-3">
+
+                <i class="bi bi-robot"></i>
+
+            </div>
+
+            <div>
+
+                <h3 class="fw-bold mb-1">
+
+                    AI Rating Prediction
+
+                </h3>
+
+                <p class="mb-0 opacity-75">
+
+                    Dự đoán xếp hạng ứng dụng bằng mô hình
+                    Random Forest
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= BODY ================= -->
+
+    <div class="card-body p-4 p-lg-5">
+
+        <div class="text-center mb-4">
+
+            <h5 class="fw-bold">
+
+                <i class="bi bi-bar-chart-line text-primary"></i>
+
+                Nhập thông tin ứng dụng
+
+            </h5>
+
+            <p class="text-muted mb-0">
+
+                Nhập các thông số bên dưới để hệ thống
+                phân tích và dự đoán xếp hạng.
+
+            </p>
+
+        </div>
+
+
+        <!-- ================= FORM ================= -->
+
+        <form
+            action="{{ url_for('predict.predict') }}"
+            method="POST">
+
+
+            <div class="row g-4">
+
+
+                <!-- ================================= -->
+                <!-- REVIEWS -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <div class="prediction-input-card">
+
+                        <label
+                            for="reviews"
+                            class="form-label fw-semibold">
+
+                            <i class="bi bi-chat-left-text text-primary"></i>
+
+                            Số lượng đánh giá
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-chat-dots"></i>
+
+                            </span>
+
+                            <input
+                                type="number"
+                                id="reviews"
+                                name="reviews"
+                                class="form-control"
+                                placeholder="Ví dụ: 1500"
+                                min="0"
+                                step="1"
+                                required>
+
+                            <span class="input-group-text">
+
+                                reviews
+
+                            </span>
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Số lượng đánh giá của người dùng.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- INSTALLS -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <div class="prediction-input-card">
+
+                        <label
+                            for="installs"
+                            class="form-label fw-semibold">
+
+                            <i class="bi bi-download text-success"></i>
+
+                            Số lượt cài đặt
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-cloud-download"></i>
+
+                            </span>
+
+                            <input
+                                type="number"
+                                id="installs"
+                                name="installs"
+                                class="form-control"
+                                placeholder="Ví dụ: 100000"
+                                min="0"
+                                step="1"
+                                required>
+
+                            <span class="input-group-text">
+
+                                lượt
+
+                            </span>
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Tổng số lượt cài đặt ứng dụng.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PRICE -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <div class="prediction-input-card">
+
+                        <label
+                            for="price"
+                            class="form-label fw-semibold">
+
+                            <i class="bi bi-currency-dollar text-warning"></i>
+
+                            Giá ứng dụng
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                $
+
+                            </span>
+
+                            <input
+                                type="number"
+                                id="price"
+                                name="price"
+                                class="form-control"
+                                placeholder="Ví dụ: 0.00"
+                                min="0"
+                                step="0.01"
+                                required>
+
+                            <span class="input-group-text">
+
+                                USD
+
+                            </span>
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Nhập 0 nếu ứng dụng miễn phí.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- SIZE -->
+                <!-- ================================= -->
+
+                <div class="col-md-6">
+
+                    <div class="prediction-input-card">
+
+                        <label
+                            for="size"
+                            class="form-label fw-semibold">
+
+                            <i class="bi bi-phone text-info"></i>
+
+                            Kích thước ứng dụng
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-hdd"></i>
+
+                            </span>
+
+                            <input
+                                type="number"
+                                id="size"
+                                name="size"
+                                class="form-control"
+                                placeholder="Ví dụ: 25.5"
+                                min="0"
+                                step="0.1"
+                                required>
+
+                            <span class="input-group-text">
+
+                                MB
+
+                            </span>
+
+                        </div>
+
+
+                        <small class="text-muted">
+
+                            Kích thước của ứng dụng tính bằng MB.
+
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= INFO ================= -->
+
+            <div class="alert alert-light border mt-4">
+
+                <div class="d-flex">
+
+                    <i class="bi bi-info-circle-fill text-primary fs-4 me-3"></i>
+
+                    <div>
+
+                        <strong>
+
+                            Hệ thống AI
+
+                        </strong>
+
+                        <p class="mb-0 text-muted small">
+
+                            Mô hình Random Forest sẽ sử dụng
+                            Đánh giá, Cài đặt, Giá cả và Kích thước
+                            để đưa ra mức xếp hạng dự đoán.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= BUTTON ================= -->
+
+            <div class="text-center mt-4">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-lg prediction-button px-5">
+
+                    <i class="bi bi-stars me-2"></i>
+
+                    Dự đoán xếp hạng
+
+                </button>
+
+            </div>
+
+
+            <!-- ================= RESET ================= -->
+
+            <div class="text-center mt-3">
+
+                <button
+                    type="reset"
+                    class="btn btn-link text-muted">
+
+                    <i class="bi bi-arrow-counterclockwise"></i>
+
+                    Xóa thông tin
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

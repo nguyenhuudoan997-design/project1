@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1">
+
+    <title>AI Rating Predictor</title>
+
+    <!-- Bootstrap -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+    <!-- Font -->
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #EEF2FF; margin: 0; padding: 40px; display: flex; justify-content: center; }
+        .main-card { background: #EEF2FF; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 600px; }
+        h2 { color: #ff4b4b; text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input { height:50px;border-radius:12px;padding-left:15px; width: 100%; border: 1px solid #ccc; font-size: 16px; }
+        button { width: 100%; padding: 12px; background-color: #ff4b4b; color: white; border: none; border-radius: 5px; font-size: 16px; font-weight: bold; cursor: pointer; }
+        button:hover { background-color: #e03e3e; }
+        .result { margin-top: 20px; padding: 15px; background-color: #e2f0d9; color: #385723; border-radius: 5px; text-align: center; font-size: 18px; font-weight: bold; }
+        .user-welcome { text-align: right; color: #666; font-size: 14px; margin-bottom: 20px; }
+    </style>
+</head>
+<script
+src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+<body>
+
+    <div class="main-card">
+        <div class="user-welcome">Xin chào, <b>{{ user }}</b> | <a href="/">Đăng xuất</a></div>
+        <h2>📱 Google Play - Dự đoán Điểm Rating</h2>
+        
+        <form action="/predict" method="POST">
+            <input type="hidden" name="user" value="{{ user }}">
+            <div class="form-group">
+                <label>💬 Số lượng đánh giá (Reviews):</label>
+                <input type="number" name="reviews" value="5000" required>
+            </div>
+            <div class="form-group">
+                <label>📥 Số lượt cài đặt (Installs):</label>
+                <input type="number" name="installs" value="100000" required>
+            </div>
+            <div class="form-group">
+                <label>💰 Giá ứng dụng ($ USD):</label>
+                <input type="number" step="0.01" name="price" value="0.0" required>
+            </div>
+            <div class="form-group">
+                <label>📦 Dung lượng (MB):</label>
+                <input type="number" step="0.1" name="size" value="25.0" required>
+            </div>
+            <button type="submit">🚀 TIẾN HÀNH PHÂN TÍCH & DỰ ĐOÁN</button>
+        </form>
+
+        {% if prediction_text %}
+            <div class="result">
+                📊 {{ prediction_text }}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

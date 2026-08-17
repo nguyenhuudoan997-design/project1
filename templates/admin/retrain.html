@@ -1,0 +1,213 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold">
+
+                <i class="bi bi-cpu"></i>
+
+                Huấn luyện lại mô hình AI
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Upload dữ liệu để huấn luyện lại Random Forest
+
+            </p>
+
+        </div>
+
+
+        <a
+            href="{{ url_for('admin.admin_dashboard') }}"
+            class="btn btn-secondary"
+        >
+
+            <i class="bi bi-arrow-left"></i>
+
+            Quay lại
+
+        </a>
+
+    </div>
+
+
+    <!-- Retrain Card -->
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-cloud-upload"></i>
+
+                        Upload Dataset
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="alert alert-info">
+
+                        <strong>Lưu ý:</strong>
+
+                        File dữ liệu phải ở định dạng
+
+                        <strong>CSV</strong>
+
+                        và có các cột:
+
+                        <br>
+
+                        <code>Reviews</code>,
+
+                        <code>Installs</code>,
+
+                        <code>Price</code>,
+
+                        <code>Size</code>,
+
+                        <code>Rating</code>
+
+                    </div>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('admin.admin_retrain') }}"
+                        enctype="multipart/form-data"
+                    >
+
+                        <div class="mb-4">
+
+                            <label
+                                for="file"
+                                class="form-label fw-bold"
+                            >
+
+                                Chọn file CSV
+
+                            </label>
+
+                            <input
+                                type="file"
+                                name="file"
+                                id="file"
+                                class="form-control"
+                                accept=".csv"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                            >
+
+                                <i class="bi bi-cpu"></i>
+
+                                Huấn luyện lại mô hình
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <!-- Process -->
+
+            <div class="card shadow-sm border-0 mt-4">
+
+                <div class="card-header">
+
+                    <h5 class="mb-0">
+
+                        Quy trình Retrain
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row text-center">
+
+                        <div class="col-md-3">
+
+                            <i class="bi bi-upload fs-1"></i>
+
+                            <p class="mt-2">
+                                Upload CSV
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <i class="bi bi-funnel fs-1"></i>
+
+                            <p class="mt-2">
+                                Làm sạch dữ liệu
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <i class="bi bi-cpu fs-1"></i>
+
+                            <p class="mt-2">
+                                Train Random Forest
+                            </p>
+
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <i class="bi bi-save fs-1"></i>
+
+                            <p class="mt-2">
+                                Lưu Model
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

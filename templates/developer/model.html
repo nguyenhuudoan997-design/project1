@@ -1,0 +1,216 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+Developer - Model
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-cpu text-primary"></i>
+
+            Mô hình AI
+
+        </h2>
+
+        <p class="text-muted mb-0">
+
+            Thông tin mô hình Học máy
+
+        </p>
+
+    </div>
+
+
+    <a
+        href="{{ url_for('developer.dashboard') }}"
+        class="btn btn-outline-secondary">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Bảng điều khiển
+
+    </a>
+
+</div>
+
+
+<!-- ==========================================
+     MODEL STATUS
+========================================== -->
+
+<div class="card border-0 shadow-sm mb-4">
+
+    <div class="card-body p-4">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-8">
+
+                <h4 class="fw-bold">
+
+                    Random Forest Regression
+
+                </h4>
+
+                <p class="text-muted">
+
+                    Mô hình được sử dụng để dự đoán
+                    đánh giá của ứng dụng.
+
+                </p>
+
+            </div>
+
+
+            <div class="col-md-4 text-md-end">
+
+                {% if model_exists %}
+
+                    <span class="badge bg-success fs-6">
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Mô hình đang hoạt động
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-danger fs-6">
+
+                        <i class="bi bi-x-circle"></i>
+
+                        Không tìm thấy Mô hình
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     MODEL INFORMATION
+========================================== -->
+
+<div class="card border-0 shadow-sm">
+
+    <div class="card-header bg-primary text-white">
+
+        <h5 class="mb-0">
+
+            <i class="bi bi-info-circle"></i>
+
+            Thông tin Mô hình
+
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        {% if model_info %}
+
+        <div class="row g-4">
+
+
+            <div class="col-md-4">
+
+                <small class="text-muted">
+
+                    Loại Mô hình
+
+                </small>
+
+                <h5 class="fw-bold mt-1">
+
+                    {{ model_info.type }}
+
+                </h5>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <small class="text-muted">
+
+                    Số lượng cây
+
+                </small>
+
+                <h5 class="fw-bold mt-1">
+
+                    {{ model_info.n_estimators }}
+
+                </h5>
+
+            </div>
+
+
+            <div class="col-md-4">
+
+                <small class="text-muted">
+
+                    Trạng thái ngẫu nhiên
+
+                </small>
+
+                <h5 class="fw-bold mt-1">
+
+                    {{ model_info.random_state }}
+
+                </h5>
+
+            </div>
+
+
+        </div>
+
+
+        <hr>
+
+
+        <div class="alert alert-info mb-0">
+
+            <i class="bi bi-lightbulb"></i>
+
+            <strong>Features:</strong>
+
+            Đánh giá, Cài đặt, Giá cả, Kích thước
+        </div>
+
+
+        {% else %}
+
+        <div class="alert alert-danger mb-0">
+
+            <i class="bi bi-exclamation-triangle"></i>
+
+            Không thể đọc thông tin Mô hình.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+{% endblock %}

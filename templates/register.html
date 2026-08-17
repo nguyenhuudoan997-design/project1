@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Đăng ký - AI Rating Predictor</title>
+
+
+    <!-- ================================
+         Bootstrap
+    ================================= -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- ================================
+         Bootstrap Icons
+    ================================= -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+
+    <!-- ================================
+         CSS
+    ================================= -->
+
+    <style>
+
+        /* =================================
+           BODY
+        ================================= */
+
+        body {
+
+            min-height: 100vh;
+
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef2ff,
+                    #f8f9fa,
+                    #e0f2fe
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+        }
+
+
+        /* =================================
+           CONTAINER
+        ================================= */
+
+        .register-container {
+
+            width: 100%;
+
+            max-width: 1000px;
+
+            padding: 20px;
+        }
+
+
+        /* =================================
+           CARD
+        ================================= */
+
+        .register-card {
+
+            background: white;
+
+            border-radius: 24px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0, 0, 0, 0.12);
+        }
+
+
+        /* =================================
+           LEFT SIDE
+        ================================= */
+
+        .register-left {
+
+            min-height: 600px;
+
+            padding: 50px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d6efd,
+                    #6610f2
+                );
+
+            color: white;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        /* =================================
+           LOGO
+        ================================= */
+
+        .logo {
+
+            width: 70px;
+
+            height: 70px;
+
+            border-radius: 18px;
+
+            background:
+                rgba(255, 255, 255, 0.15);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 34px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =================================
+           LEFT TITLE
+        ================================= */
+
+        .register-left h1 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+        }
+
+
+        .register-left p {
+
+            opacity: 0.9;
+
+            line-height: 1.7;
+        }
+
+
+        /* =================================
+           FEATURES
+        ================================= */
+
+        .feature {
+
+            margin-top: 30px;
+        }
+
+
+        .feature-item {
+
+            display: flex;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+
+        .feature-item i {
+
+            font-size: 22px;
+
+            margin-right: 15px;
+
+            width: 25px;
+        }
+
+
+        /* =================================
+           RIGHT SIDE
+        ================================= */
+
+        .register-right {
+
+            min-height: 600px;
+
+            padding: 50px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+        }
+
+
+        /* =================================
+           TITLE
+        ================================= */
+
+        .register-title {
+
+            font-weight: 700;
+
+            color: #212529;
+
+            margin-bottom: 8px;
+        }
+
+
+        .register-subtitle {
+
+            color: #6c757d;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =================================
+           FORM LABEL
+        ================================= */
+
+        .form-label {
+
+            font-weight: 600;
+
+            margin-bottom: 8px;
+        }
+
+
+        /* =================================
+           INPUT
+        ================================= */
+
+        .input-group {
+
+            margin-bottom: 20px;
+        }
+
+
+        .input-group-text {
+
+            background: #f8f9fa;
+
+            border-right: none;
+
+            min-width: 48px;
+
+            justify-content: center;
+        }
+
+
+        .form-control {
+
+            padding: 12px;
+
+            border-left: none;
+        }
+
+
+        .form-control:focus {
+
+            box-shadow: none;
+
+            border-color: #86b7fe;
+        }
+
+
+        .input-group:focus-within
+        .input-group-text {
+
+            border-color: #86b7fe;
+
+            background: #eef5ff;
+        }
+
+
+        /* =================================
+           REGISTER BUTTON
+        ================================= */
+
+        .btn-register {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0d6efd,
+                    #6610f2
+                );
+
+            color: white;
+
+            font-weight: 600;
+
+            font-size: 16px;
+
+            transition: 0.3s;
+        }
+
+
+        .btn-register:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(13, 110, 253, 0.3);
+        }
+
+
+        /* =================================
+           ERROR
+        ================================= */
+
+        .error-message {
+
+            background: #fff1f2;
+
+            color: #dc3545;
+
+            border: 1px solid #f5c2c7;
+
+            border-radius: 10px;
+
+            padding: 12px 15px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+        }
+
+
+        /* =================================
+           SUCCESS
+        ================================= */
+
+        .success-message {
+
+            background: #ecfdf3;
+
+            color: #198754;
+
+            border: 1px solid #a3cfbb;
+
+            border-radius: 10px;
+
+            padding: 12px 15px;
+
+            margin-bottom: 20px;
+
+            font-size: 14px;
+        }
+
+
+        /* =================================
+           LOGIN LINK
+        ================================= */
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #6c757d;
+        }
+
+
+        .login-link a {
+
+            color: #0d6efd;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+
+        .login-link a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =================================
+           PASSWORD RULES
+        ================================= */
+
+        .password-help {
+
+            font-size: 12px;
+
+            color: #6c757d;
+
+            margin-top: -10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* =================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 768px) {
+
+            .register-left {
+
+                display: none;
+            }
+
+
+            .register-right {
+
+                min-height: auto;
+
+                padding: 35px 25px;
+            }
+
+
+            .register-card {
+
+                border-radius: 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <div class="row g-0">
+
+
+            <!-- =====================================
+                 LEFT SIDE
+            ====================================== -->
+
+            <div class="col-md-6">
+
+                <div class="register-left">
+
+
+                    <!-- Logo -->
+
+                    <div class="logo">
+
+                        <i class="bi bi-stars"></i>
+
+                    </div>
+
+
+                    <!-- Title -->
+
+                    <h1>
+
+                        AI Rating Predictor
+
+                    </h1>
+
+
+                    <p>
+
+                        Tạo tài khoản để bắt đầu sử dụng
+                        hệ thống dự đoán Rating ứng dụng
+                        Google Play bằng trí tuệ nhân tạo.
+
+                    </p>
+
+
+                    <!-- Features -->
+
+                    <div class="feature">
+
+
+                        <div class="feature-item">
+
+                            <i class="bi bi-robot"></i>
+
+                            <span>
+
+                                Dự đoán Rating bằng AI
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="feature-item">
+
+                            <i class="bi bi-clock-history"></i>
+
+                            <span>
+
+                                Lưu lại lịch sử dự đoán
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="feature-item">
+
+                            <i class="bi bi-bar-chart-line"></i>
+
+                            <span>
+
+                                Theo dõi thống kê và phân tích
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="feature-item">
+
+                            <i class="bi bi-person-check"></i>
+
+                            <span>
+
+                                Quản lý thông tin cá nhân
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================
+                 RIGHT SIDE
+            ====================================== -->
+
+            <div class="col-md-6">
+
+                <div class="register-right">
+
+
+                    <!-- Title -->
+
+                    <h2 class="register-title">
+
+                        Tạo tài khoản 🚀
+
+                    </h2>
+
+
+                    <p class="register-subtitle">
+
+                        Đăng ký để bắt đầu sử dụng hệ thống
+
+                    </p>
+
+
+                    <!-- =================================
+                         ERROR MESSAGE
+                    ================================== -->
+
+                    {% if error %}
+
+                    <div class="error-message">
+
+                        <i
+                            class="bi bi-exclamation-circle me-2">
+                        </i>
+
+                        {{ error }}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================
+                         SUCCESS MESSAGE
+                    ================================== -->
+
+                    {% if success %}
+
+                    <div class="success-message">
+
+                        <i
+                            class="bi bi-check-circle me-2">
+                        </i>
+
+                        {{ success }}
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================
+                         REGISTER FORM
+                    ================================== -->
+
+                    <form method="POST">
+
+
+                        <!-- Username -->
+
+                        <label class="form-label">
+
+                            Tên đăng nhập
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-person"></i>
+
+                            </span>
+
+
+                            <input
+                                type="text"
+                                name="username"
+                                class="form-control"
+                                placeholder="Nhập tên đăng nhập"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Password -->
+
+                        <label class="form-label">
+
+                            Mật khẩu
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-lock"></i>
+
+                            </span>
+
+
+                            <input
+                                type="password"
+                                name="password"
+                                id="password"
+                                class="form-control"
+                                placeholder="Nhập mật khẩu"
+                                autocomplete="new-password"
+                                required
+                            >
+
+
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                                onclick="togglePassword()"
+                            >
+
+                                <i
+                                    class="bi bi-eye"
+                                    id="passwordIcon">
+                                </i>
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="password-help">
+
+                            <i class="bi bi-info-circle"></i>
+
+                            Nên sử dụng mật khẩu có độ dài
+                            từ 6 ký tự trở lên.
+
+                        </div>
+
+
+                        <!-- Confirm password -->
+
+                        <label class="form-label">
+
+                            Xác nhận mật khẩu
+
+                        </label>
+
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-shield-lock"></i>
+
+                            </span>
+
+
+                            <input
+                                type="password"
+                                name="confirm_password"
+                                id="confirmPassword"
+                                class="form-control"
+                                placeholder="Nhập lại mật khẩu"
+                                autocomplete="new-password"
+                                required
+                            >
+
+
+                            <button
+                                type="button"
+                                class="btn btn-light"
+                                onclick="toggleConfirmPassword()"
+                            >
+
+                                <i
+                                    class="bi bi-eye"
+                                    id="confirmPasswordIcon">
+                                </i>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- Register button -->
+
+                        <button
+                            type="submit"
+                            class="btn-register"
+                        >
+
+                            <i class="bi bi-person-plus me-2"></i>
+
+                            Tạo tài khoản
+
+                        </button>
+
+
+                    </form>
+
+
+                    <!-- =================================
+                         LOGIN
+                    ================================== -->
+
+                    <div class="login-link">
+
+                        Đã có tài khoản?
+
+                        <a
+                            href="{{ url_for('auth.login') }}"
+                        >
+
+                            Đăng nhập ngay
+
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================
+     JAVASCRIPT
+====================================== -->
+
+<script>
+
+
+/* =================================
+   SHOW / HIDE PASSWORD
+================================= */
+
+function togglePassword() {
+
+    const password =
+        document.getElementById("password");
+
+    const icon =
+        document.getElementById("passwordIcon");
+
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        icon.classList.remove(
+            "bi-eye"
+        );
+
+        icon.classList.add(
+            "bi-eye-slash"
+        );
+
+    }
+
+    else {
+
+        password.type = "password";
+
+        icon.classList.remove(
+            "bi-eye-slash"
+        );
+
+        icon.classList.add(
+            "bi-eye"
+        );
+
+    }
+
+}
+
+
+/* =================================
+   SHOW / HIDE CONFIRM PASSWORD
+================================= */
+
+function toggleConfirmPassword() {
+
+    const password =
+        document.getElementById(
+            "confirmPassword"
+        );
+
+    const icon =
+        document.getElementById(
+            "confirmPasswordIcon"
+        );
+
+
+    if (password.type === "password") {
+
+        password.type = "text";
+
+        icon.classList.remove(
+            "bi-eye"
+        );
+
+        icon.classList.add(
+            "bi-eye-slash"
+        );
+
+    }
+
+    else {
+
+        password.type = "password";
+
+        icon.classList.remove(
+            "bi-eye-slash"
+        );
+
+        icon.classList.add(
+            "bi-eye"
+        );
+
+    }
+
+}
+
+
+/* =================================
+   CHECK PASSWORD
+================================= */
+
+document
+    .querySelector("form")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            const password =
+                document.getElementById(
+                    "password"
+                ).value;
+
+            const confirmPassword =
+                document.getElementById(
+                    "confirmPassword"
+                ).value;
+
+
+            if (password !== confirmPassword) {
+
+                event.preventDefault();
+
+                alert(
+                    "Mật khẩu xác nhận không khớp!"
+                );
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

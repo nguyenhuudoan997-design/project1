@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+
+    {% include "components/welcome.html" %}
+
+    {% include "components/statistics.html" %}
+
+    {% include "components/predict_form.html" %}
+
+    {% include "components/prediction_result.html" %}
+
+    {% include "components/trend_chart.html" %}
+
+    {% include "components/rating_chart.html" %}
+
+    {% include "components/top_users.html" %}
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+window.dashboardData = {
+
+    trendLabels: {{ trend_labels|tojson }},
+
+    trendValues: {{ trend_values|tojson }},
+
+    ratingLabels: {{ rating_labels|tojson }},
+
+    ratingValues: {{ rating_values|tojson }}
+
+};
+
+</script>
+
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+{% endblock %}

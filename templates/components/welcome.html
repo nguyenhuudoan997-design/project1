@@ -1,0 +1,129 @@
+<!-- ========================================= -->
+<!-- DASHBOARD WELCOME -->
+<!-- ========================================= -->
+
+<div class="col-12">
+
+    <div class="card border-0 shadow-lg dashboard-welcome-card">
+
+        <div class="card-body p-4 p-lg-5">
+
+            <div class="row align-items-center">
+
+                <!-- ============================= -->
+                <!-- WELCOME CONTENT -->
+                <!-- ============================= -->
+
+                <div class="col-lg-8">
+
+                    <div class="d-flex align-items-center mb-3">
+
+                        <span class="welcome-badge me-3">
+
+                            <i class="bi bi-stars"></i>
+
+                        </span>
+
+                        <span class="text-primary fw-semibold">
+
+                            AI Rating Predictor
+
+                        </span>
+
+                    </div>
+
+
+                    <h1 class="fw-bold mb-3">
+
+                        Xin chào,
+
+                        <span class="text-primary">
+
+                            {{ user }}
+
+                        </span>
+
+                        👋
+
+                    </h1>
+
+
+                    <p class="text-muted fs-5 mb-4">
+
+                        Chào mừng bạn quay trở lại hệ thống
+                        <strong>AI Rating Predictor</strong>.
+
+                        <br>
+
+                        Hãy sử dụng trí tuệ nhân tạo để dự đoán
+                        xếp hạng ứng dụng một cách nhanh chóng.
+
+                    </p>
+
+
+                    <!-- ========================= -->
+                    <!-- QUICK ACTION -->
+                    <!-- ========================= -->
+
+                    <div class="d-flex flex-wrap gap-2">
+
+                        <a
+                            href="{{ url_for('dashboard.dashboard') }}"
+                            class="btn btn-primary px-4 py-2">
+
+                            <i class="bi bi-cpu-fill me-2"></i>
+
+                            Dự đoán xếp hạng
+
+                        </a>
+
+
+                        <a
+                            href="{{ url_for('history.history') }}"
+                            class="btn btn-outline-primary px-4 py-2">
+
+                            <i class="bi bi-clock-history me-2"></i>
+
+                            Xem lịch sử
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ============================= -->
+                <!-- AI ROBOT -->
+                <!-- ============================= -->
+
+                <div class="col-lg-4 text-center mt-4 mt-lg-0">
+
+                    <div class="ai-welcome-icon">
+
+                        <i class="bi bi-robot"></i>
+
+                    </div>
+
+
+                    <div class="mt-3">
+
+                        <span class="badge bg-success-subtle text-success">
+
+                            <i class="bi bi-circle-fill small"></i>
+
+                            Hệ Thống AI Đang Hoạt Động
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

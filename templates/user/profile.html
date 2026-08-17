@@ -1,0 +1,472 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Hồ sơ cá nhân | AI Rating Predictor
+{% endblock %}
+
+{% block content %}
+
+<!-- ============================= -->
+<!-- PROFILE HEADER -->
+<!-- ============================= -->
+
+<div class="row g-4">
+
+    <!-- ============================= -->
+    <!-- LEFT - PROFILE CARD -->
+    <!-- ============================= -->
+
+    <div class="col-lg-4">
+
+        <div class="card border-0 shadow-sm h-100 profile-card">
+
+            <div class="card-body text-center p-4">
+
+                <!-- Avatar -->
+
+                <div class="profile-avatar mx-auto mb-3">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <!-- Username -->
+
+                <h3 class="fw-bold mb-1">
+
+                    {{ user }}
+
+                </h3>
+
+                <p class="text-muted mb-3">
+
+                    Người dùng AI Rating Predictor
+
+                </p>
+
+                <!-- Role -->
+
+                {% if session.get("role") == "Admin" %}
+
+                    <span class="badge bg-danger px-3 py-2">
+
+                        <i class="bi bi-shield-lock-fill me-1"></i>
+
+                        Quản trị viên
+
+                    </span>
+
+                {% elif session.get("role") == "Developer" %}
+
+                    <span class="badge bg-primary px-3 py-2">
+
+                        <i class="bi bi-code-slash me-1"></i>
+
+                        Nhà phát triển
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-success px-3 py-2">
+
+                        <i class="bi bi-person-check-fill me-1"></i>
+
+                        Người dùng
+
+                    </span>
+
+                {% endif %}
+
+                <hr class="my-4">
+
+                <!-- Status -->
+
+                <div class="d-flex justify-content-center align-items-center">
+
+                    <span
+                        class="rounded-circle bg-success me-2"
+                        style="width:10px;height:10px;">
+                    </span>
+
+                    <span class="text-muted">
+
+                        Đang hoạt động
+
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- RIGHT - INFORMATION -->
+    <!-- ============================= -->
+
+    <div class="col-lg-8">
+
+        <div class="card border-0 shadow-sm">
+
+            <!-- Header -->
+
+            <div class="card-header bg-primary text-white py-3">
+
+                <h5 class="mb-0 fw-bold">
+
+                    <i class="bi bi-person-vcard me-2"></i>
+
+                    Thông tin tài khoản
+
+                </h5>
+
+            </div>
+
+            <div class="card-body p-4">
+
+                <!-- Username -->
+
+                <div class="profile-info mb-4">
+
+                    <div class="profile-info-icon">
+
+                        <i class="bi bi-person"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small class="text-muted d-block">
+
+                            Tên đăng nhập
+
+                        </small>
+
+                        <strong class="fs-5">
+
+                            {{ user }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Role -->
+
+                <div class="profile-info mb-4">
+
+                    <div class="profile-info-icon">
+
+                        <i class="bi bi-shield-check"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small class="text-muted d-block">
+
+                            Vai trò
+
+                        </small>
+
+                        <strong>
+
+                            {{ session.get("role", "User") }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- System -->
+
+                <div class="profile-info mb-4">
+
+                    <div class="profile-info-icon">
+
+                        <i class="bi bi-robot"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small class="text-muted d-block">
+
+                            Hệ thống
+
+                        </small>
+
+                        <strong>
+
+                            AI Rating Predictor
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="profile-info">
+
+                    <div class="profile-info-icon">
+
+                        <i class="bi bi-activity"></i>
+
+                    </div>
+
+                    <div>
+
+                        <small class="text-muted d-block">
+
+                            Trạng thái
+
+                        </small>
+
+                        <strong class="text-success">
+
+                            Đang hoạt động
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- ACCOUNT ACTIONS -->
+        <!-- ============================= -->
+
+        <div class="card border-0 shadow-sm mt-4">
+
+            <div class="card-header bg-light py-3">
+
+                <h5 class="mb-0 fw-bold">
+
+                    <i class="bi bi-gear me-2"></i>
+
+                    Quản lý tài khoản
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="row g-3">
+
+                    <!-- Dashboard -->
+
+                    <div class="col-md-6">
+
+                        <a
+                            href="{{ url_for('dashboard.dashboard') }}"
+                            class="btn btn-outline-primary w-100 py-3">
+
+                            <i class="bi bi-speedometer2 me-2"></i>
+
+                            Quay lại Bảng điều khiển
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- History -->
+
+                    <div class="col-md-6">
+
+                        <a
+                            href="{{ url_for('history.history') }}"
+                            class="btn btn-outline-secondary w-100 py-3">
+
+                            <i class="bi bi-clock-history me-2"></i>
+
+                            Xem lịch sử dự đoán
+
+                        </a>
+
+                    </div>
+
+
+                    <!-- Logout -->
+
+                    <div class="col-12">
+
+                        <a
+                            href="{{ url_for('auth.logout') }}"
+                            class="btn btn-outline-danger w-100 py-3">
+
+                            <i class="bi bi-box-arrow-right me-2"></i>
+
+                            Đăng xuất
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================= -->
+<!-- PROFILE CUSTOM CSS -->
+<!-- ============================= -->
+
+<style>
+
+    /* Profile avatar */
+
+    .profile-avatar {
+
+        width: 110px;
+
+        height: 110px;
+
+        border-radius: 50%;
+
+        background: linear-gradient(
+            135deg,
+            #0d6efd,
+            #6f42c1
+        );
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 55px;
+
+        box-shadow: 0 8px 25px rgba(
+            13,
+            110,
+            253,
+            0.25
+        );
+
+    }
+
+
+    /* Profile information */
+
+    .profile-info {
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 15px;
+
+        padding: 15px;
+
+        border-radius: 12px;
+
+        background: #f8f9fa;
+
+        transition: all 0.25s ease;
+
+    }
+
+
+    .profile-info:hover {
+
+        transform: translateX(5px);
+
+        background: #eef4ff;
+
+    }
+
+
+    /* Information icon */
+
+    .profile-info-icon {
+
+        width: 45px;
+
+        height: 45px;
+
+        border-radius: 12px;
+
+        background: #e7f0ff;
+
+        color: #0d6efd;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 21px;
+
+        flex-shrink: 0;
+
+    }
+
+
+    /* Card */
+
+    .profile-card {
+
+        border-radius: 18px;
+
+        overflow: hidden;
+
+    }
+
+
+    .card {
+
+        border-radius: 15px;
+
+    }
+
+
+    /* Buttons */
+
+    .btn {
+
+        border-radius: 10px;
+
+        font-weight: 500;
+
+        transition: all 0.25s ease;
+
+    }
+
+
+    .btn:hover {
+
+        transform: translateY(-2px);
+
+    }
+
+</style>
+
+{% endblock %}

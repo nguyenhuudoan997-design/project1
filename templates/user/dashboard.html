@@ -1,0 +1,337 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- =========================
+         PAGE HEADER
+    ========================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                <i class="bi bi-speedometer2"></i>
+                User Dashboard
+            </h2>
+
+            <p class="text-muted mb-0">
+                Welcome back, {{ user }}!
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('predict.predict_page') }}"
+            class="btn btn-primary">
+
+            <i class="bi bi-cpu"></i>
+            Predict Rating
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================
+         STATISTICS CARDS
+    ========================== -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- Total Predictions -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Total Predictions
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                {{ total_prediction }}
+                            </h2>
+
+                        </div>
+
+                        <div class="text-primary fs-1">
+
+                            <i class="bi bi-graph-up"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Average Rating -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Average Rating
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+
+                                ⭐ {{ average_rating }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="text-warning fs-1">
+
+                            <i class="bi bi-star-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Model Accuracy -->
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+                                Model Accuracy
+                            </p>
+
+                            <h2 class="fw-bold mb-0">
+                                {{ accuracy }}%
+                            </h2>
+
+                        </div>
+
+                        <div class="text-success fs-1">
+
+                            <i class="bi bi-check-circle"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PREDICTION TREND
+    ========================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-graph-up-arrow"></i>
+                Prediction Trend
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <canvas id="predictionTrendChart"></canvas>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         RATING DISTRIBUTION
+    ========================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-pie-chart"></i>
+                Rating Distribution
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div style="max-width: 500px; margin: auto;">
+
+                <canvas id="ratingDistributionChart"></canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<!-- =========================
+     CHART.JS
+========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+    // =========================
+    // Prediction Trend
+    // =========================
+
+    const trendLabels = {{ trend_labels | tojson }};
+
+    const trendValues = {{ trend_values | tojson }};
+
+
+    new Chart(
+        document.getElementById(
+            "predictionTrendChart"
+        ),
+        {
+
+            type: "line",
+
+            data: {
+
+                labels: trendLabels,
+
+                datasets: [
+
+                    {
+
+                        label: "Prediction Rating",
+
+                        data: trendValues,
+
+                        borderWidth: 3,
+
+                        tension: 0.4,
+
+                        fill: true
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                scales: {
+
+                    y: {
+
+                        min: 1,
+
+                        max: 5
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    // =========================
+    // Rating Distribution
+    // =========================
+
+    const ratingLabels =
+        {{ rating_labels | tojson }};
+
+    const ratingValues =
+        {{ rating_values | tojson }};
+
+
+    new Chart(
+
+        document.getElementById(
+            "ratingDistributionChart"
+        ),
+
+        {
+
+            type: "pie",
+
+            data: {
+
+                labels: ratingLabels,
+
+                datasets: [
+
+                    {
+
+                        data: ratingValues
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true
+
+            }
+
+        }
+
+    );
+
+</script>
+
+{% endblock %}

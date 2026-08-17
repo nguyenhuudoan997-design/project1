@@ -1,0 +1,576 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ========================================== -->
+    <!-- ADMIN HEADER -->
+    <!-- ========================================== -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+
+                <i class="bi bi-speedometer2"></i>
+
+                Bảng điều khiển Quản trị
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Tổng quan hệ thống và quản lý AI Rating Predictor
+
+            </p>
+
+        </div>
+
+
+        <span class="badge bg-danger fs-6">
+
+            <i class="bi bi-shield-lock"></i>
+
+            Quản trị viên
+
+        </span>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- MESSAGE -->
+    <!-- ========================================== -->
+
+    {% if message %}
+
+    <div
+        class="alert alert-info alert-dismissible fade show"
+        role="alert"
+    >
+
+        <i class="bi bi-info-circle"></i>
+
+        {{ message }}
+
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+        ></button>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- ========================================== -->
+    <!-- FLASH MESSAGE -->
+    <!-- ========================================== -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+            <div
+                class="alert alert-{{ category }} alert-dismissible fade show"
+                role="alert"
+            >
+
+                {{ message }}
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                ></button>
+
+            </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- ========================================== -->
+    <!-- STATISTICS -->
+    <!-- ========================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- Total Users -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+
+                                Tổng số người dùng
+
+                            </p>
+
+                            <h3 class="fw-bold mb-0">
+
+                                {{ total_users|default(0) }}
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="fs-1 text-primary">
+
+                            <i class="bi bi-people"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Total Predictions -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+
+                                Tổng số dự đoán
+
+                            </p>
+
+                            <h3 class="fw-bold mb-0">
+
+                                {{ total_predictions|default(0) }}
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="fs-1 text-success">
+
+                            <i class="bi bi-graph-up"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Average Rating -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+
+                                Xếp hạng trung bình
+
+                            </p>
+
+                            <h3 class="fw-bold mb-0">
+
+                                ⭐ {{ average_rating|default(0) }}
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="fs-1 text-warning">
+
+                            <i class="bi bi-star"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Accuracy -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body">
+
+                    <div
+                        class="d-flex justify-content-between align-items-center"
+                    >
+
+                        <div>
+
+                            <p class="text-muted mb-1">
+
+                                Độ chính xác của mô hình
+
+                            </p>
+
+                            <h3 class="fw-bold mb-0">
+
+                                {{ accuracy|default(0) }}%
+
+                            </h3>
+
+                        </div>
+
+
+                        <div class="fs-1 text-info">
+
+                            <i class="bi bi-cpu"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- ADMIN MANAGEMENT -->
+    <!-- ========================================== -->
+
+    <div class="card shadow-sm border-0 mt-4">
+
+    <div class="card-header bg-dark text-white">
+
+        <h5 class="mb-0">
+            <i class="bi bi-tools"></i>
+            Quản trị hệ thống
+        </h5>
+
+    </div>
+
+
+    <div class="card-body">
+
+        <div class="row g-4">
+
+            <!-- ============================== -->
+            <!-- QUẢN LÝ NGƯỜI DÙNG -->
+            <!-- ============================== -->
+
+            <div class="col-md-6">
+
+                <a
+                    href="{{ url_for('admin.users') }}"
+                    class="btn btn-outline-primary w-100 py-3"
+                >
+
+                    <i class="bi bi-people fs-4"></i>
+
+                    <br>
+
+                    Quản lý người dùng
+
+                </a>
+
+            </div>
+
+
+            <!-- ============================== -->
+            <!-- RETRAIN MODEL -->
+            <!-- ============================== -->
+
+            <div class="col-md-6">
+
+                <button
+                    type="button"
+                    class="btn btn-outline-success w-100 py-3"
+                    data-bs-toggle="modal"
+                    data-bs-target="#retrainModal"
+                >
+
+                    <i class="bi bi-cpu fs-4"></i>
+
+                    <br>
+
+                    Huấn luyện lại mô hình AI
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ====================================== -->
+<!-- RETRAIN MODEL MODAL -->
+<!-- ====================================== -->
+
+<div
+    class="modal fade"
+    id="retrainModal"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    <i class="bi bi-cpu"></i>
+
+                    Huấn luyện lại mô hình AI
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <form
+                method="POST"
+                action="{{ url_for('admin.admin_retrain') }}"
+                enctype="multipart/form-data"
+            >
+
+                <div class="modal-body">
+
+                    <div class="alert alert-info">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        Chọn file
+                        <strong>googleplaystore.csv</strong>
+                        để huấn luyện lại mô hình.
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <label
+                            for="file"
+                            class="form-label fw-bold"
+                        >
+
+                            File dữ liệu CSV
+
+                        </label>
+
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="file"
+                            name="file"
+                            accept=".csv"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="text-muted small">
+
+                        Các tính năng:
+
+                        <ul>
+
+                            <li>Đánh giá</li>
+
+                            <li>Cài đặt</li>
+
+                            <li>Giá cả</li>
+
+                            <li>Kích thước</li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+
+                        Hủy
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-success"
+                    >
+
+                        <i class="bi bi-arrow-repeat"></i>
+
+                        Bắt đầu Huấn luyện lại
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- ========================================== -->
+    <!-- SYSTEM INFORMATION -->
+    <!-- ========================================== -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-info-circle"></i>
+
+                Thông tin hệ thống
+
+            </h5>
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row">
+
+
+                <!-- Model -->
+
+                <div class="col-md-4 mb-3">
+
+                    <p class="mb-1 text-muted">
+
+                        Mô hình Học máy
+
+                    </p>
+
+                    <strong>
+
+                        Random Forest Regression Model
+
+                    </strong>
+
+                </div>
+
+
+                <!-- Features -->
+
+                <div class="col-md-4 mb-3">
+
+                    <p class="mb-1 text-muted">
+
+                        Các đặc điểm đầu vào
+
+                    </p>
+
+                    <strong>
+
+                        Đánh giá, Cài đặt, Giá cả, Kích thước
+
+                    </strong>
+
+                </div>
+
+
+                <!-- Model File -->
+
+                <div class="col-md-4 mb-3">
+
+                    <p class="mb-1 text-muted">
+
+                        Tập tin mô hình
+
+                    </p>
+
+                    <strong>
+
+                        models/random_forest_model.pkl
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
