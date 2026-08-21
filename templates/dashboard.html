@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Dashboard
+Bảng điều khiển
 {% endblock %}
+
 
 {% block content %}
 
@@ -26,7 +27,8 @@ Dashboard
 
 {% endblock %}
 
-{% block scripts %}
+
+{% block extra_js %}
 
 <script>
 
@@ -43,6 +45,7 @@ window.dashboardData = {
 };
 
 </script>
+
 
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 

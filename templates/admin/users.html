@@ -1,163 +1,486 @@
 {% extends "layout.html" %}
 
+{% block title %}
+Quản lý người dùng
+{% endblock %}
+
+
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container-fluid mt-4">
 
-    <div>
+    <!-- ========================================= -->
+    <!-- HEADER -->
+    <!-- ========================================= -->
 
-        <h2 class="fw-bold">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <i class="bi bi-people"></i>
+        <div>
 
-            Quản lý người dùng
+            <h2 class="fw-bold mb-1">
 
-        </h2>
+                <i class="bi bi-people-fill me-2"></i>
 
-        <p class="text-muted mb-0">
+                Quản lý người dùng
 
-            Quản lý tài khoản người dùng trong hệ thống.
+            </h2>
 
-        </p>
+            <p class="text-muted mb-0">
 
-    </div>
+                Quản lý tài khoản và quyền truy cập hệ thống.
 
+            </p>
 
-    <span class="badge bg-danger fs-6">
+        </div>
 
-        <i class="bi bi-shield-lock"></i>
+        <div>
 
-        Quản trị viên
+            <span class="badge bg-primary px-3 py-2">
 
-    </span>
+                <i class="bi bi-shield-lock me-1"></i>
 
-</div>
+                Administrator
 
+            </span>
 
-<div class="card shadow-sm border-0">
-
-    <div class="card-header bg-dark text-white">
-
-        <h5 class="mb-0">
-
-            <i class="bi bi-person-lines-fill"></i>
-
-            Danh sách người dùng
-
-        </h5>
+        </div>
 
     </div>
 
 
-    <div class="card-body">
+    <!-- ========================================= -->
+    <!-- SEARCH / FILTER -->
+    <!-- ========================================= -->
 
-        <div class="alert alert-info">
+    <div class="card border-0 shadow-sm mb-4">
 
-            <i class="bi bi-info-circle"></i>
+        <div class="card-body">
 
-            Chức năng quản lý người dùng đang được phát triển.
+            <form
+                method="GET"
+                action="{{ url_for('admin.users') }}"
+            >
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- SEARCH -->
+
+                    <div class="col-md-6">
+
+                        <label class="form-label fw-semibold">
+
+                            Tìm kiếm người dùng
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+
+                                <i class="bi bi-search"></i>
+
+                            </span>
+
+                            <input
+                                type="text"
+                                name="keyword"
+                                class="form-control"
+                                placeholder="Nhập username..."
+                                value="{{ keyword }}"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROLE -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label fw-semibold">
+
+                            Vai trò
+
+                        </label>
+
+                        <select
+                            name="role"
+                            class="form-select"
+                        >
+
+                            <option value="">
+                                Tất cả vai trò
+                            </option>
+
+                            <option
+                                value="User"
+                                {% if role == "User" %}
+                                    selected
+                                {% endif %}
+                            >
+                                User
+                            </option>
+
+                            <option
+                                value="Developer"
+                                {% if role == "Developer" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Developer
+                            </option>
+
+                            <option
+                                value="Admin"
+                                {% if role == "Admin" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Admin
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- BUTTON -->
+
+                    <div class="col-md-3">
+
+                        <div class="d-flex gap-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary flex-fill"
+                            >
+
+                                <i class="bi bi-search me-1"></i>
+
+                                Tìm kiếm
+
+                            </button>
+
+                            <a
+                                href="{{ url_for('admin.users') }}"
+                                class="btn btn-outline-secondary"
+                            >
+
+                                <i class="bi bi-arrow-clockwise"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================================= -->
+    <!-- USER TABLE -->
+    <!-- ========================================= -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-white py-3">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div>
+
+                    <h5 class="mb-0 fw-semibold">
+
+                        <i class="bi bi-person-lines-fill me-2"></i>
+
+                        Danh sách người dùng
+
+                    </h5>
+
+                </div>
+
+                <span class="badge bg-light text-dark">
+
+                    {{ users|length }} tài khoản
+
+                </span>
+
+            </div>
 
         </div>
 
 
-        <table class="table table-hover">
+        <div class="card-body p-0">
 
-            <thead>
+            {% if users %}
 
-                <tr>
+                <div class="table-responsive">
 
-                    <th>Stt</th>
+                    <table class="table table-hover align-middle mb-0">
 
-                    <th>Tên đăng nhập</th>
+                        <thead class="table-light">
 
-                    <th>Vai trò</th>
+                            <tr>
 
-                    <th>Trạng thái</th>
+                                <th class="ps-4">
+                                    ID
+                                </th>
 
-                </tr>
+                                <th>
+                                    Người dùng
+                                </th>
 
-            </thead>
+                                <th>
+                                    Vai trò
+                                </th>
 
+                                <th>
+                                    Ngày đăng ký
+                                </th>
 
-            <tbody>
+                                <th class="text-end pe-4">
+                                    Thao tác
+                                </th>
 
-                <tr>
+                            </tr>
 
-                    <td>1</td>
-
-                    <td>admin</td>
-
-                    <td>
-                        <span class="badge bg-danger">
-                            Quản trị viên
-                        </span>
-                    </td>
-
-                    <td>
-                        <span class="badge bg-success">
-                            Hoạt động
-                        </span>
-                    </td>
-
-                </tr>
+                        </thead>
 
 
-                <tr>
+                        <tbody>
 
-                    <td>2</td>
+                            {% for user in users %}
 
-                    <td>dev</td>
+                            <tr>
 
-                    <td>
-                        <span class="badge bg-warning text-dark">
-                            Nhà phát triển
-                        </span>
-                    </td>
+                                <!-- ID -->
 
-                    <td>
-                        <span class="badge bg-success">
-                            Hoạt động
-                        </span>
-                    </td>
+                                <td class="ps-4">
 
-                </tr>
+                                    <span class="text-muted">
+
+                                        #{{ user.id }}
+
+                                    </span>
+
+                                </td>
 
 
-                <tr>
+                                <!-- USER -->
 
-                    <td>3</td>
+                                <td>
 
-                    <td>user</td>
+                                    <div class="d-flex align-items-center">
 
-                    <td>
-                        <span class="badge bg-primary">
-                            Người dùng
-                        </span>
-                    </td>
+                                        <div
+                                            class="rounded-circle
+                                                   bg-primary
+                                                   text-white
+                                                   d-flex
+                                                   align-items-center
+                                                   justify-content-center
+                                                   me-3"
+                                            style="
+                                                width:42px;
+                                                height:42px;
+                                            "
+                                        >
 
-                    <td>
-                        <span class="badge bg-success">
-                            Hoạt động
-                        </span>
-                    </td>
+                                            <i class="bi bi-person-fill"></i>
 
-                </tr>
+                                        </div>
 
-            </tbody>
+                                        <div>
 
-        </table>
+                                            <div class="fw-semibold">
+
+                                                {{ user.username }}
+
+                                            </div>
+
+                                            <small class="text-muted">
+
+                                                User ID: {{ user.id }}
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
 
 
-        <a
-            href="{{ url_for('admin.admin_dashboard') }}"
-            class="btn btn-secondary"
-        >
+                                <!-- ROLE -->
 
-            <i class="bi bi-arrow-left"></i>
+                                <td>
 
-            Quay lại Bảng điều khiển
+                                    {% if user.role == "Admin" %}
 
-        </a>
+                                        <span class="badge bg-danger">
+
+                                            <i class="bi bi-shield-lock me-1"></i>
+
+                                            Admin
+
+                                        </span>
+
+                                    {% elif user.role == "Developer" %}
+
+                                        <span class="badge bg-info text-dark">
+
+                                            <i class="bi bi-code-slash me-1"></i>
+
+                                            Developer
+
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge bg-secondary">
+
+                                            <i class="bi bi-person me-1"></i>
+
+                                            User
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- CREATED -->
+
+                                <td>
+
+                                    {% if user.created_at %}
+
+                                        {{ user.created_at.strftime("%d/%m/%Y %H:%M") }}
+
+                                    {% else %}
+
+                                        <span class="text-muted">
+                                            Không xác định
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <!-- ACTIONS -->
+
+                                <td class="text-end pe-4">
+
+                                    <div class="btn-group">
+
+                                        <a
+                                            href="{{ url_for(
+                                                'admin.user_detail',
+                                                user_id=user.id
+                                            ) }}"
+                                            class="btn btn-sm btn-outline-primary"
+                                            title="Xem chi tiết"
+                                        >
+
+                                            <i class="bi bi-eye"></i>
+
+                                        </a>
+
+
+                                        {% if user.id != session.get("user_id") %}
+
+                                        <form
+                                            method="POST"
+                                            action="{{ url_for(
+                                                'admin.delete_user',
+                                                user_id=user.id
+                                            ) }}"
+                                            class="d-inline"
+                                            onsubmit="
+                                                return confirm(
+                                                    'Bạn có chắc chắn muốn xóa người dùng này không?'
+                                                );
+                                            "
+                                        >
+
+                                            <button
+                                                type="submit"
+                                                class="btn btn-sm btn-outline-danger"
+                                                title="Xóa người dùng"
+                                            >
+
+                                                <i class="bi bi-trash"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                        {% else %}
+
+                                        <button
+                                            class="btn btn-sm btn-outline-secondary"
+                                            disabled
+                                            title="Không thể xóa tài khoản hiện tại"
+                                        >
+
+                                            <i class="bi bi-lock"></i>
+
+                                        </button>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <!-- EMPTY -->
+
+                <div class="text-center py-5">
+
+                    <div class="fs-1 text-muted mb-3">
+
+                        <i class="bi bi-person-x"></i>
+
+                    </div>
+
+                    <h5>
+
+                        Không tìm thấy người dùng
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Không có tài khoản nào phù hợp với điều kiện tìm kiếm.
+
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
 
     </div>
 

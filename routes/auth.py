@@ -1,9 +1,18 @@
-from flask import Blueprint
-from flask import render_template
-from flask import request
-from flask import session
-from flask import redirect
-from flask import url_for
+# ==========================================
+# IMPORT
+# ==========================================
+
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    session,
+    redirect,
+    url_for
+)
+
+from extensions import db
+from models.user import User
 
 
 # ==========================================
@@ -17,112 +26,134 @@ auth_bp = Blueprint(
 
 
 # ==========================================
-# USERS DATABASE
-# ==========================================
-
-users_db = {
-
-    "user": {
-        "password": "123",
-        "role": "User"
-    },
-
-    "dev": {
-        "password": "dev123",
-        "role": "Developer"
-    },
-
-    "admin": {
-        "password": "admin123",
-        "role": "Admin"
-    }
-
-}
-
-
-# ==========================================
 # LOGIN
 # ==========================================
 
 @auth_bp.route("/", methods=["GET", "POST"])
 def login():
 
-    print(">>> LOGIN ROUTE ĐƯỢC GỌI")
-    print(">>> METHOD:", request.method)
-
     error = None
 
     if request.method == "POST":
 
-        print(">>> ĐÃ NHẬN POST LOGIN")
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
 
-        username = request.form.get("username")
-        password = request.form.get("password")
+        password = request.form.get(
+            "password",
+            ""
+        )
 
-        print(">>> USERNAME:", username)
-        print(">>> PASSWORD:", password)
+        # --------------------------------------
+        # VALIDATE
+        # --------------------------------------
 
-        if username in users_db:
+        if not username or not password:
 
-            print(">>> USERNAME TỒN TẠI")
+            error = (
+                "Vui lòng nhập đầy đủ "
+                "tên đăng nhập và mật khẩu."
+            )
 
-            if users_db[username]["password"] == password:
+            return render_template(
+                "login.html",
+                error=error
+            )
 
-                print(">>> PASSWORD ĐÚNG")
+        # --------------------------------------
+        # FIND USER
+        # --------------------------------------
 
-                session["user"] = username
-                session["role"] = users_db[username]["role"]
+        user = User.query.filter_by(
+            username=username
+        ).first()
 
-                role = users_db[username]["role"]
+        if user is None:
 
-                print(">>> ROLE:", role)
+            error = "Tài khoản không tồn tại."
 
-                if role == "User":
+            return render_template(
+                "login.html",
+                error=error
+            )
 
-                    print(">>> REDIRECT USER")
+        # --------------------------------------
+        # CHECK PASSWORD
+        # --------------------------------------
 
-                    return redirect(
-                        url_for("dashboard.dashboard")
-                    )
+        if not user.check_password(password):
 
-                elif role == "Developer":
+            error = "Sai mật khẩu."
 
-                    print(">>> REDIRECT DEVELOPER")
+            return render_template(
+                "login.html",
+                error=error
+            )
 
-                    return redirect(
-                        url_for("developer.dashboard")
-                    )
+        # --------------------------------------
+        # CREATE SESSION
+        # --------------------------------------
 
-                elif role == "Admin":
+        session.clear()
 
-                    print(">>> REDIRECT ADMIN")
+        session["user_id"] = user.id
+        session["user"] = user.username
+        session["role"] = user.role
 
-                    return redirect(
-                        url_for("admin.admin_dashboard")
-                    )
+        # --------------------------------------
+        # REDIRECT BY ROLE
+        # --------------------------------------
 
-            else:
+        if user.role == "User":
 
-                print(">>> PASSWORD SAI")
+            return redirect(
+                url_for("dashboard.dashboard")
+            )
 
-                error = "Sai mật khẩu!"
+        if user.role == "Developer":
 
-        else:
+            return redirect(
+                url_for("developer.dashboard")
+            )
 
-            print(">>> USERNAME KHÔNG TỒN TẠI")
+        if user.role == "Admin":
 
-            error = "Tài khoản không tồn tại!"
+            return redirect(
+                url_for("admin.admin_dashboard")
+            )
+
+        # --------------------------------------
+        # INVALID ROLE
+        # --------------------------------------
+
+        session.clear()
+
+        error = (
+            "Tài khoản có quyền truy cập "
+            "không hợp lệ."
+        )
+
+        return render_template(
+            "login.html",
+            error=error
+        )
 
     return render_template(
         "login.html",
         error=error
     )
 
+
 # ==========================================
 # REGISTER
 # ==========================================
 
-@auth_bp.route("/register", methods=["GET", "POST"])
+@auth_bp.route(
+    "/register",
+    methods=["GET", "POST"]
+)
 def register():
 
     error = None
@@ -130,25 +161,59 @@ def register():
 
     if request.method == "POST":
 
-        username = request.form.get("username")
-        password = request.form.get("password")
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
+
+        password = request.form.get(
+            "password",
+            ""
+        )
+
+        # --------------------------------------
+        # VALIDATE
+        # --------------------------------------
 
         if not username or not password:
 
-            error = "Vui lòng nhập đầy đủ thông tin."
+            error = (
+                "Vui lòng nhập đầy đủ "
+                "thông tin."
+            )
 
-        elif username in users_db:
+        # --------------------------------------
+        # CHECK USERNAME
+        # --------------------------------------
 
-            error = "Tên đăng nhập đã tồn tại."
+        elif User.query.filter_by(
+            username=username
+        ).first():
+
+            error = (
+                "Tên đăng nhập đã tồn tại."
+            )
+
+        # --------------------------------------
+        # CREATE USER
+        # --------------------------------------
 
         else:
 
-            users_db[username] = {
-                "password": password,
-                "role": "User"
-            }
+            user = User(
+                username=username,
+                role="User"
+            )
 
-            success = "Đăng ký thành công."
+            user.set_password(password)
+
+            db.session.add(user)
+            db.session.commit()
+
+            success = (
+                "Đăng ký thành công. "
+                "Bạn có thể đăng nhập."
+            )
 
     return render_template(
         "auth/register.html",

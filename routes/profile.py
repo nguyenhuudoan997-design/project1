@@ -1,5 +1,19 @@
-from flask import Blueprint, render_template, session
+# ==========================================
+# IMPORT
+# ==========================================
 
+from flask import (
+    Blueprint,
+    render_template,
+    session,
+    redirect,
+    url_for
+)
+
+
+# ==========================================
+# BLUEPRINT
+# ==========================================
 
 profile_bp = Blueprint(
     "profile",
@@ -7,15 +21,22 @@ profile_bp = Blueprint(
 )
 
 
+# ==========================================
+# PROFILE
+# ==========================================
+
 @profile_bp.route("/profile")
 def profile():
 
-    username = session.get(
-        "user",
-        "Khách"
-    )
+    if "user_id" not in session:
+
+        return redirect(
+            url_for("auth.login")
+        )
+
 
     return render_template(
         "user/profile.html",
-        user=username
+        user=session.get("user"),
+        role=session.get("role")
     )

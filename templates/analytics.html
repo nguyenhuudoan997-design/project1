@@ -1,0 +1,391 @@
+{% extends "layout.html" %}
+
+
+{% block title %}
+Analytics
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-bar-chart-fill me-2"></i>
+
+            Phân tích dữ liệu
+
+        </h2>
+
+        <p class="text-muted">
+
+            Phân tích kết quả dự đoán Rating của ứng dụng.
+
+        </p>
+
+    </div>
+
+
+    <!-- ==========================================
+         CHART ROW
+    =========================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- ======================================
+             TREND CHART
+        ======================================= -->
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0 fw-semibold">
+
+                        <i class="bi bi-graph-up me-2"></i>
+
+                        Xu hướng dự đoán Rating
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        style="
+                            position: relative;
+                            height: 400px;
+                        "
+                    >
+
+                        <canvas id="trendChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
+             RATING DISTRIBUTION
+        ======================================= -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white">
+
+                    <h5 class="mb-0 fw-semibold">
+
+                        <i class="bi bi-pie-chart-fill me-2"></i>
+
+                        Phân bố Rating
+
+                    </h5>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        style="
+                            position: relative;
+                            height: 400px;
+                        "
+                    >
+
+                        <canvas id="ratingChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        console.log(
+            ">>> analytics.js bắt đầu chạy"
+        );
+
+
+        // ======================================
+        // CHECK CHART.JS
+        // ======================================
+
+        if (
+            typeof Chart === "undefined"
+        ) {
+
+            console.error(
+                ">>> Chart.js chưa được tải!"
+            );
+
+            return;
+        }
+
+
+        console.log(
+            ">>> Chart.js version:",
+            Chart.version
+        );
+
+
+        // ======================================
+        // FLASK DATA
+        // ======================================
+
+        const trendLabels =
+            {{ trend_labels|tojson }};
+
+        const trendValues =
+            {{ trend_values|tojson }};
+
+        const ratingLabels =
+            {{ rating_labels|tojson }};
+
+        const ratingValues =
+            {{ rating_values|tojson }};
+
+
+        console.log(
+            ">>> Trend labels:",
+            trendLabels
+        );
+
+        console.log(
+            ">>> Trend values:",
+            trendValues
+        );
+
+        console.log(
+            ">>> Rating labels:",
+            ratingLabels
+        );
+
+        console.log(
+            ">>> Rating values:",
+            ratingValues
+        );
+
+
+        // ======================================
+        // TREND CHART
+        // ======================================
+
+        const trendCanvas =
+            document.getElementById(
+                "trendChart"
+            );
+
+
+        if (trendCanvas) {
+
+            new Chart(
+                trendCanvas,
+                {
+
+                    type: "line",
+
+                    data: {
+
+                        labels: trendLabels,
+
+                        datasets: [
+
+                            {
+
+                                label:
+                                    "Rating dự đoán",
+
+                                data:
+                                    trendValues,
+
+                                borderWidth: 3,
+
+                                tension: 0.4,
+
+                                fill: true,
+
+                                pointRadius: 5,
+
+                                pointHoverRadius: 7
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        scales: {
+
+                            y: {
+
+                                min: 0,
+
+                                max: 5,
+
+                                ticks: {
+
+                                    stepSize: 0.5
+
+                                },
+
+                                title: {
+
+                                    display: true,
+
+                                    text: "Rating"
+
+                                }
+
+                            },
+
+                            x: {
+
+                                title: {
+
+                                    display: true,
+
+                                    text:
+                                        "Lần dự đoán"
+
+                                }
+
+                            }
+
+                        },
+
+                        plugins: {
+
+                            legend: {
+
+                                display: true
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            console.log(
+                ">>> Trend chart đã được tạo"
+            );
+
+        }
+
+
+        // ======================================
+        // RATING PIE CHART
+        // ======================================
+
+        const ratingCanvas =
+            document.getElementById(
+                "ratingChart"
+            );
+
+
+        if (ratingCanvas) {
+
+            new Chart(
+                ratingCanvas,
+                {
+
+                    type: "pie",
+
+                    data: {
+
+                        labels: ratingLabels,
+
+                        datasets: [
+
+                            {
+
+                                data:
+                                    ratingValues
+
+                            }
+
+                        ]
+
+                    },
+
+
+                    options: {
+
+                        responsive: true,
+
+                        maintainAspectRatio: false,
+
+                        plugins: {
+
+                            legend: {
+
+                                position:
+                                    "bottom"
+
+                            }
+
+                        }
+
+                    }
+
+                }
+            );
+
+
+            console.log(
+                ">>> Rating chart đã được tạo"
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

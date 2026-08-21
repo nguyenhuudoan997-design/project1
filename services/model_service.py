@@ -1,3 +1,7 @@
+# ==========================================
+# IMPORT
+# ==========================================
+
 from pathlib import Path
 
 import joblib
@@ -5,18 +9,24 @@ import numpy as np
 import pandas as pd
 
 
-# ============================================================
+# ==========================================
 # MODEL PATH
-# ============================================================
+# ==========================================
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(
+    __file__
+).resolve().parent.parent
 
-MODEL_PATH = BASE_DIR / "models" / "random_forest_model.pkl"
+MODEL_PATH = (
+    BASE_DIR
+    / "models"
+    / "random_forest_model.pkl"
+)
 
 
-# ============================================================
+# ==========================================
 # LOAD MODEL
-# ============================================================
+# ==========================================
 
 if not MODEL_PATH.exists():
 
@@ -25,12 +35,14 @@ if not MODEL_PATH.exists():
     )
 
 
-model = joblib.load(MODEL_PATH)
+model = joblib.load(
+    MODEL_PATH
+)
 
 
-# ============================================================
+# ==========================================
 # EXPECTED FEATURES
-# ============================================================
+# ==========================================
 
 FEATURE_COLUMNS = [
     "Reviews",
@@ -40,13 +52,18 @@ FEATURE_COLUMNS = [
 ]
 
 
-# ============================================================
+# ==========================================
 # CHECK MODEL FEATURES
-# ============================================================
+# ==========================================
 
-if hasattr(model, "feature_names_in_"):
+if hasattr(
+    model,
+    "feature_names_in_"
+):
 
-    model_features = list(model.feature_names_in_)
+    model_features = list(
+        model.feature_names_in_
+    )
 
     if model_features != FEATURE_COLUMNS:
 
@@ -54,14 +71,13 @@ if hasattr(model, "feature_names_in_"):
             "\nModel không tương thích với website!\n"
             f"Model đang yêu cầu: {model_features}\n"
             f"Website đang sử dụng: {FEATURE_COLUMNS}\n\n"
-            "Hãy chạy lại train_model.py để tạo model mới "
-            "với đúng 4 feature."
+            "Hãy train lại model."
         )
 
 
-# ============================================================
+# ==========================================
 # MODEL SERVICE
-# ============================================================
+# ==========================================
 
 class ModelService:
 
@@ -73,50 +89,58 @@ class ModelService:
         size
     ):
         """
-        Dự đoán Rating dựa trên 4 feature:
+        Dự đoán Rating dựa trên:
 
-        - Reviews
-        - Installs
-        - Price
-        - Size
+        Reviews
+        Installs
+        Price
+        Size
         """
-
-        # ----------------------------------------------------
-        # Convert dữ liệu sang số
-        # ----------------------------------------------------
 
         reviews = float(reviews)
         installs = float(installs)
         price = float(price)
         size = float(size)
 
-        # ----------------------------------------------------
-        # Tạo DataFrame
-        # ----------------------------------------------------
+        # ----------------------------------
+        # INPUT DATA
+        # ----------------------------------
 
         input_data = pd.DataFrame({
 
-            "Reviews": [reviews],
+            "Reviews": [
+                reviews
+            ],
 
-            "Installs": [installs],
+            "Installs": [
+                installs
+            ],
 
-            "Price": [price],
+            "Price": [
+                price
+            ],
 
-            "Size": [size]
+            "Size": [
+                size
+            ]
 
         })
 
-        # ----------------------------------------------------
-        # Predict
-        # ----------------------------------------------------
+        # ----------------------------------
+        # PREDICT
+        # ----------------------------------
 
-        prediction = model.predict(input_data)
+        prediction = model.predict(
+            input_data
+        )
 
-        raw_rating = float(prediction[0])
+        raw_rating = float(
+            prediction[0]
+        )
 
-        # ----------------------------------------------------
-        # Giới hạn Rating
-        # ----------------------------------------------------
+        # ----------------------------------
+        # LIMIT RATING
+        # ----------------------------------
 
         predicted_rating = np.clip(
             raw_rating,
@@ -124,9 +148,9 @@ class ModelService:
             5.0
         )
 
-        # ----------------------------------------------------
-        # Làm tròn
-        # ----------------------------------------------------
+        # ----------------------------------
+        # ROUND
+        # ----------------------------------
 
         predicted_rating = round(
             float(predicted_rating),

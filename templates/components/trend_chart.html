@@ -1,140 +1,39 @@
-<!-- ========================================= -->
-<!-- Prediction Trend -->
-<!-- ========================================= -->
+<!-- ==========================================
+     PREDICTION TREND CHART
+========================================== -->
 
-<div class="card shadow-sm border-0 h-100">
+<div class="card shadow-sm border-0 mb-4">
 
-    <!-- Card Header -->
-    <div class="card-header bg-info text-white py-3">
+    <div class="card-header bg-white border-0 py-3">
 
-        <div class="d-flex justify-content-between align-items-center">
+        <h5 class="mb-1 fw-semibold">
 
-            <div>
+            <i class="bi bi-graph-up me-2"></i>
 
-                <h4 class="mb-1 fw-bold">
+            Xu hướng dự đoán
 
-                    <i class="bi bi-graph-up-arrow me-2"></i>
+        </h5>
 
-                    Xu hướng dự đoán
+        <small class="text-muted">
 
-                </h4>
+            Rating dự đoán theo từng lần dự đoán
 
-                <small class="opacity-75">
-
-                    Theo dõi sự thay đổi của các dự đoán theo thời gian
-
-                </small>
-
-            </div>
-
-            <div>
-
-                <span class="badge bg-white text-info">
-
-                    <i class="bi bi-bar-chart-line"></i>
-
-                    Xu hướng dự đoán
-
-                </span>
-
-            </div>
-
-        </div>
+        </small>
 
     </div>
 
 
-    <!-- Card Body -->
-    <div class="card-body p-4">
-
-        <!-- Chart Information -->
-
-        <div class="row mb-3">
-
-            <div class="col-md-6">
-
-                <div class="d-flex align-items-center">
-
-                    <div
-                        class="rounded-circle bg-info bg-opacity-10
-                               text-info d-flex align-items-center
-                               justify-content-center me-2"
-                        style="width:40px;height:40px;">
-
-                        <i class="bi bi-activity"></i>
-
-                    </div>
-
-                    <div>
-
-                        <small class="text-muted d-block">
-
-                            Dữ liệu dự đoán
-
-                        </small>
-
-                        <strong>
-
-                            Đánh giá theo từng lần dự đoán
-
-                        </strong>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="col-md-6 text-md-end mt-3 mt-md-0">
-
-                <span class="badge bg-light text-dark border">
-
-                    <i class="bi bi-info-circle me-1"></i>
-
-                    AI Rating Predictor
-
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <!-- Chart -->
+    <div class="card-body">
 
         <div
-            class="position-relative"
-            style="height:350px;">
+            style="
+                position: relative;
+                width: 100%;
+                height: 350px;
+            "
+        >
 
-            <canvas id="ratingChart"></canvas>
-
-        </div>
-
-
-        <!-- Chart Footer -->
-
-        <div class="border-top mt-4 pt-3">
-
-            <div class="d-flex justify-content-between align-items-center">
-
-                <small class="text-muted">
-
-                    <i class="bi bi-lightbulb me-1"></i>
-
-                    Biểu đồ thể hiện xu hướng đánh giá được AI dự đoán.
-
-                </small>
-
-                <small class="text-muted">
-
-                    <i class="bi bi-cpu me-1"></i>
-
-                    Random Forest
-
-                </small>
-
-            </div>
+            <canvas id="trendChart"></canvas>
 
         </div>
 

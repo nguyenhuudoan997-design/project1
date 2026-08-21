@@ -2,19 +2,20 @@
 # IMPORT
 # ==========================================
 
-import os
-import joblib
-import pandas as pd
-
 from flask import (
     Blueprint,
     render_template,
     request,
-    current_app
+    redirect,
+    url_for,
+    session,
+    flash
 )
 
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.model_selection import train_test_split
+from extensions import db
+from models.user import User
+from models.prediction import Prediction
+from services.prediction_service import PredictionService
 
 
 # ==========================================
@@ -23,364 +24,487 @@ from sklearn.model_selection import train_test_split
 
 admin_bp = Blueprint(
     "admin",
-    __name__
+    __name__,
+    url_prefix="/admin"
 )
+
+
+# ==========================================
+# ADMIN AUTHORIZATION
+# ==========================================
+
+def admin_required():
+    """
+    Kiểm tra người dùng hiện tại có phải Admin hay không.
+    """
+
+    if "user_id" not in session:
+        return False
+
+    if session.get("role") != "Admin":
+        return False
+
+    return True
 
 
 # ==========================================
 # ADMIN DASHBOARD
 # ==========================================
 
-@admin_bp.route("/admin")
+@admin_bp.route("/")
 def admin_dashboard():
+
+    if not admin_required():
+        flash(
+            "Bạn không có quyền truy cập khu vực quản trị.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("dashboard.dashboard")
+        )
+
+    # --------------------------------------
+    # SYSTEM STATISTICS
+    # --------------------------------------
+
+    system_stats = PredictionService.get_system_statistics()
+
+    total_users = system_stats["total_users"]
+
+    total_predictions = system_stats["total_predictions"]
+
+    average_rating = system_stats["average_rating"]
+
+    accuracy = system_stats["accuracy"]
+
+    total_admins = system_stats["total_admins"]
+
+    total_developers = system_stats["total_developers"]
+
+    total_normal_users = system_stats["total_normal_users"]
+    
+    total_admins = User.query.filter_by(
+        role="Admin"
+    ).count()
+
+    total_developers = User.query.filter_by(
+        role="Developer"
+    ).count()
+
+    total_normal_users = User.query.filter_by(
+        role="User"
+    ).count()
+
+    # --------------------------------------
+    # RECENT USERS
+    # --------------------------------------
+
+    recent_users = (
+        User.query
+        .order_by(User.created_at.desc())
+        .limit(5)
+        .all()
+    )
+
+    # --------------------------------------
+    # RECENT PREDICTIONS
+    # --------------------------------------
+
+    recent_predictions = (
+        Prediction.query
+        .order_by(Prediction.created_at.desc())
+        .limit(10)
+        .all()
+    )
+
+    # --------------------------------------
+    # RATING DISTRIBUTION
+    # --------------------------------------
+
+    rating_distribution = (
+        PredictionService
+        .get_rating_distribution()
+    )
+
+    rating_labels = [
+        str(item[0])
+        for item in rating_distribution
+    ]
+
+    rating_values = [
+        item[1]
+        for item in rating_distribution
+    ]
+
+    # --------------------------------------
+    # RENDER
+    # --------------------------------------
 
     return render_template(
         "admin/dashboard.html",
-        user="Admin",
-        total_users=0,
-        total_predictions=0,
-        average_rating=0,
-        accuracy=0,
-        message=None
+        total_users=total_users,
+        total_predictions=total_predictions,
+        average_rating=average_rating,
+        accuracy=accuracy,
+        total_admins=total_admins,
+        total_developers=total_developers,
+        total_normal_users=total_normal_users,
+        recent_users=recent_users,
+        recent_predictions=recent_predictions,
+        rating_labels=rating_labels,
+        rating_values=rating_values
     )
 
 
 # ==========================================
-# ADMIN - MANAGE USERS
+# MANAGE USERS
 # ==========================================
 
-@admin_bp.route("/admin/users")
+@admin_bp.route("/users")
 def users():
+
+    if not admin_required():
+        flash(
+            "Bạn không có quyền truy cập.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("dashboard.dashboard")
+        )
+
+    keyword = request.args.get(
+        "keyword",
+        ""
+    ).strip()
+
+    role = request.args.get(
+        "role",
+        ""
+    ).strip()
+
+    query = User.query
+
+    # --------------------------------------
+    # SEARCH
+    # --------------------------------------
+
+    if keyword:
+
+        query = query.filter(
+            User.username.ilike(
+                f"%{keyword}%"
+            )
+        )
+
+    # --------------------------------------
+    # ROLE FILTER
+    # --------------------------------------
+
+    if role:
+
+        query = query.filter(
+            User.role == role
+        )
+
+    # --------------------------------------
+    # ORDER
+    # --------------------------------------
+
+    users_list = (
+        query
+        .order_by(User.created_at.desc())
+        .all()
+    )
 
     return render_template(
         "admin/users.html",
-        user="Admin"
+        users=users_list,
+        keyword=keyword,
+        role=role
     )
 
 
 # ==========================================
-# ADMIN - RETRAIN MODEL
+# USER DETAIL
+# ==========================================
+
+@admin_bp.route("/users/<int:user_id>")
+def user_detail(user_id):
+
+    if not admin_required():
+        flash(
+            "Bạn không có quyền truy cập.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("dashboard.dashboard")
+        )
+
+    user = User.query.get_or_404(
+        user_id
+    )
+
+    predictions = (
+        Prediction.query
+        .filter_by(user_id=user.id)
+        .order_by(
+            Prediction.created_at.desc()
+        )
+        .all()
+    )
+
+    return render_template(
+        "admin/user_detail.html",
+        user=user,
+        predictions=predictions
+    )
+
+
+# ==========================================
+# CHANGE USER ROLE
 # ==========================================
 
 @admin_bp.route(
-    "/admin_retrain",
+    "/users/<int:user_id>/role",
     methods=["POST"]
+)
+def change_role(user_id):
+
+    if not admin_required():
+        flash(
+            "Bạn không có quyền thực hiện thao tác này.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("dashboard.dashboard")
+        )
+
+    user = User.query.get_or_404(
+        user_id
+    )
+
+    # Không cho Admin tự đổi quyền của chính mình
+
+    if user.id == session.get("user_id"):
+
+        flash(
+            "Bạn không thể thay đổi quyền của chính mình.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("admin.users")
+        )
+
+    new_role = request.form.get(
+        "role"
+    )
+
+    allowed_roles = [
+        "User",
+        "Developer",
+        "Admin"
+    ]
+
+    if new_role not in allowed_roles:
+
+        flash(
+            "Quyền người dùng không hợp lệ.",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "admin.user_detail",
+                user_id=user.id
+            )
+        )
+
+    user.role = new_role
+
+    db.session.commit()
+
+    flash(
+        "Đã cập nhật quyền người dùng.",
+        "success"
+    )
+
+    return redirect(
+        url_for(
+            "admin.user_detail",
+            user_id=user.id
+        )
+    )
+
+
+# ==========================================
+# DELETE USER
+# ==========================================
+
+@admin_bp.route(
+    "/users/<int:user_id>/delete",
+    methods=["POST"]
+)
+def delete_user(user_id):
+
+    if not admin_required():
+        flash(
+            "Bạn không có quyền thực hiện thao tác này.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("dashboard.dashboard")
+        )
+
+    user = User.query.get_or_404(
+        user_id
+    )
+
+    # Không cho Admin tự xóa chính mình
+
+    if user.id == session.get("user_id"):
+
+        flash(
+            "Bạn không thể xóa tài khoản của chính mình.",
+            "warning"
+        )
+
+        return redirect(
+            url_for("admin.users")
+        )
+
+    username = user.username
+
+    db.session.delete(user)
+    db.session.commit()
+
+    flash(
+        f"Đã xóa người dùng {username}.",
+        "success"
+    )
+
+    return redirect(
+        url_for("admin.users")
+    )
+
+
+# ==========================================
+# ALL PREDICTION HISTORY
+# ==========================================
+
+@admin_bp.route("/predictions")
+def predictions():
+
+    if not admin_required():
+        flash(
+            "Bạn không có quyền truy cập.",
+            "danger"
+        )
+
+        return redirect(
+            url_for("dashboard.dashboard")
+        )
+
+    page = request.args.get(
+        "page",
+        1,
+        type=int
+    )
+
+    keyword = request.args.get(
+        "keyword",
+        ""
+    ).strip()
+
+    rating = request.args.get(
+        "rating",
+        ""
+    ).strip()
+
+    pagination = (
+        PredictionService
+        .get_predictions_paginated(
+            page=page,
+            per_page=10,
+            keyword=keyword,
+            rating=rating,
+            user_id=None
+        )
+    )
+
+    history = pagination.items
+
+    return render_template(
+        "user/history.html",
+        history=history,
+        pagination=pagination,
+        keyword=keyword,
+        rating=rating,
+        admin_mode=True
+    )
+
+
+# ==========================================
+# RETRAIN PAGE
+# ==========================================
+
+@admin_bp.route(
+    "/retrain",
+    methods=["GET", "POST"]
 )
 def admin_retrain():
 
-    template = "admin/dashboard.html"
-
-    # --------------------------------------
-    # Kiểm tra file
-    # --------------------------------------
-
-    if "file" not in request.files:
-
-        return render_template(
-            template,
-            user="Admin",
-            message="❌ Không tìm thấy file tải lên!"
+    if not admin_required():
+        flash(
+            "Bạn không có quyền truy cập.",
+            "danger"
         )
 
-    file = request.files["file"]
-
-    # --------------------------------------
-    # Kiểm tra tên file
-    # --------------------------------------
-
-    if file.filename == "":
-
-        return render_template(
-            template,
-            user="Admin",
-            message="❌ Bạn chưa chọn file CSV!"
+        return redirect(
+            url_for("dashboard.dashboard")
         )
 
-    # --------------------------------------
-    # Kiểm tra định dạng
-    # --------------------------------------
+    if request.method == "POST":
 
-    if not file.filename.lower().endswith(".csv"):
-
-        return render_template(
-            template,
-            user="Admin",
-            message="❌ Chỉ chấp nhận file .csv"
+        file = request.files.get(
+            "dataset"
         )
 
-    # --------------------------------------
-    # Upload folder
-    # --------------------------------------
+        if not file:
 
-    upload_folder = current_app.config.get(
-        "UPLOAD_FOLDER",
-        "uploads"
-    )
-
-    os.makedirs(
-        upload_folder,
-        exist_ok=True
-    )
-
-    # --------------------------------------
-    # Đường dẫn file CSV
-    # --------------------------------------
-
-    file_path = os.path.join(
-        upload_folder,
-        "googleplaystore.csv"
-    )
-
-    file.save(file_path)
-
-    # ======================================
-    # TRAIN MODEL
-    # ======================================
-
-    try:
-
-        # ----------------------------------
-        # Đọc dữ liệu
-        # ----------------------------------
-
-        df = pd.read_csv(file_path)
-
-        # ----------------------------------
-        # Kiểm tra Rating
-        # ----------------------------------
-
-        if "Rating" not in df.columns:
-
-            return render_template(
-                template,
-                user="Admin",
-                message=(
-                    "❌ File CSV không có "
-                    "cột Rating!"
-                )
+            flash(
+                "Vui lòng chọn file CSV.",
+                "warning"
             )
 
-        # ----------------------------------
-        # Làm sạch Rating
-        # ----------------------------------
-
-        df["Rating"] = pd.to_numeric(
-            df["Rating"],
-            errors="coerce"
-        )
-
-        df = df.dropna(
-            subset=["Rating"]
-        )
-
-        # ----------------------------------
-        # Kiểm tra Features
-        # ----------------------------------
-
-        features = [
-            "Reviews",
-            "Installs",
-            "Price",
-            "Size"
-        ]
-
-        missing_features = [
-            column
-            for column in features
-            if column not in df.columns
-        ]
-
-        if missing_features:
-
-            return render_template(
-                template,
-                user="Admin",
-                message=(
-                    "❌ File CSV thiếu các cột: "
-                    + ", ".join(missing_features)
-                )
+            return redirect(
+                url_for("admin.admin_retrain")
             )
 
-        # ----------------------------------
-        # Làm sạch Reviews
-        # ----------------------------------
+        # ------------------------------------------------
+        # PHẦN TRAIN MODEL
+        # ------------------------------------------------
+        #
+        # Tạm thời chưa gọi train_model.py tại đây.
+        #
+        # Sau khi phần Admin ổn định, chúng ta sẽ
+        # nối chức năng training vào đây.
+        #
 
-        df["Reviews"] = pd.to_numeric(
-            df["Reviews"],
-            errors="coerce"
+        flash(
+            "File đã được nhận. Chức năng huấn luyện mô hình sẽ được xử lý ở bước tiếp theo.",
+            "info"
         )
 
-        # ----------------------------------
-        # Làm sạch Installs
-        # ----------------------------------
-
-        df["Installs"] = (
-            df["Installs"]
-            .astype(str)
-            .str.replace(
-                "+",
-                "",
-                regex=False
-            )
-            .str.replace(
-                ",",
-                "",
-                regex=False
-            )
+        return redirect(
+            url_for("admin.admin_retrain")
         )
-
-        df["Installs"] = pd.to_numeric(
-            df["Installs"],
-            errors="coerce"
-        )
-
-        # ----------------------------------
-        # Làm sạch Price
-        # ----------------------------------
-
-        df["Price"] = (
-            df["Price"]
-            .astype(str)
-            .str.replace(
-                "$",
-                "",
-                regex=False
-            )
-        )
-
-        df["Price"] = pd.to_numeric(
-            df["Price"],
-            errors="coerce"
-        )
-
-        # ----------------------------------
-        # Làm sạch Size
-        # ----------------------------------
-
-        df["Size"] = (
-            df["Size"]
-            .astype(str)
-            .str.replace(
-                "M",
-                "",
-                regex=False
-            )
-            .str.replace(
-                "k",
-                "",
-                regex=False
-            )
-        )
-
-        df["Size"] = pd.to_numeric(
-            df["Size"],
-            errors="coerce"
-        )
-
-        # ----------------------------------
-        # X và y
-        # ----------------------------------
-
-        X = df[features].fillna(0)
-
-        y = df["Rating"]
-
-        # ----------------------------------
-        # Kiểm tra dữ liệu
-        # ----------------------------------
-
-        if len(X) < 10:
-
-            return render_template(
-                template,
-                user="Admin",
-                message=(
-                    "❌ Dữ liệu quá ít để "
-                    "huấn luyện Model!"
-                )
-            )
-
-        # ----------------------------------
-        # Train / Test Split
-        # ----------------------------------
-
-        X_train, X_test, y_train, y_test = (
-            train_test_split(
-                X,
-                y,
-                test_size=0.2,
-                random_state=42
-            )
-        )
-
-        # ----------------------------------
-        # Random Forest
-        # ----------------------------------
-
-        new_model = RandomForestRegressor(
-            n_estimators=100,
-            random_state=42,
-            n_jobs=-1
-        )
-
-        new_model.fit(
-            X_train,
-            y_train
-        )
-
-        # ----------------------------------
-        # Models folder
-        # ----------------------------------
-
-        model_folder = os.path.join(
-            current_app.root_path,
-            "models"
-        )
-
-        os.makedirs(
-            model_folder,
-            exist_ok=True
-        )
-
-        # ----------------------------------
-        # Model path
-        # ----------------------------------
-
-        model_path = os.path.join(
-            model_folder,
-            "random_forest_model.pkl"
-        )
-
-        # ----------------------------------
-        # Save model
-        # ----------------------------------
-
-        joblib.dump(
-            new_model,
-            model_path
-        )
-
-        message = (
-            "✅ Retrain Model thành công! "
-            "Model đã được cập nhật."
-        )
-
-    except Exception as err:
-
-        message = (
-            f"❌ Lỗi khi Retrain Model: {err}"
-        )
-
-    # --------------------------------------
-    # Trả kết quả
-    # --------------------------------------
 
     return render_template(
-        template,
-        user="Admin",
-        total_users=0,
-        total_predictions=0,
-        average_rating=0,
-        accuracy=0,
-        message=message
+        "admin/retrain.html"
     )

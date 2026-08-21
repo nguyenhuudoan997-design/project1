@@ -1,189 +1,39 @@
-<!-- ========================================= -->
-<!-- RATING DISTRIBUTION -->
-<!-- ========================================= -->
+<!-- ==========================================
+     RATING DISTRIBUTION CHART
+========================================== -->
 
-<div class="col-12">
+<div class="card shadow-sm border-0 mb-4">
 
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="card-header bg-white border-0 py-3">
 
-        <!-- ================= HEADER ================= -->
+        <h5 class="mb-1 fw-semibold">
 
-        <div class="card-header bg-white border-0 p-4">
+            <i class="bi bi-pie-chart-fill me-2"></i>
 
-            <div class="d-flex justify-content-between align-items-center">
+            Phân bố Rating
 
-                <div>
+        </h5>
 
-                    <div class="d-flex align-items-center mb-2">
+        <small class="text-muted">
 
-                        <div
-                            class="rounded-3 d-flex align-items-center justify-content-center me-3"
-                            style="
-                                width: 48px;
-                                height: 48px;
-                                background: rgba(25, 135, 84, 0.1);
-                            "
-                        >
+            Phân bố số lần dự đoán theo Rating
 
-                            <i
-                                class="bi bi-pie-chart-fill text-success fs-4">
-                            </i>
+        </small>
 
-                        </div>
+    </div>
 
-                        <div>
 
-                            <h4 class="fw-bold mb-0">
+    <div class="card-body">
 
-                                Phân bố xếp hạng
+        <div
+            style="
+                position: relative;
+                width: 100%;
+                height: 350px;
+            "
+        >
 
-                            </h4>
-
-                            <small class="text-muted">
-
-                                Thống kê kết quả dự đoán theo mức đánh giá
-
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <!-- Badge -->
-
-                <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
-
-                    <i class="bi bi-bar-chart-fill me-1"></i>
-
-                    Phân tích dữ liệu
-
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= BODY ================= -->
-
-        <div class="card-body px-4 pb-4">
-
-            <div class="row align-items-center">
-
-                <!-- ================= CHART ================= -->
-
-                <div class="col-lg-8">
-
-                    <div
-                        class="position-relative"
-                        style="height: 350px;"
-                    >
-
-                        <canvas id="pieChart"></canvas>
-
-                    </div>
-
-                </div>
-
-
-                <!-- ================= SUMMARY ================= -->
-
-                <div class="col-lg-4 mt-4 mt-lg-0">
-
-                    <div class="bg-light rounded-4 p-4">
-
-                        <h6 class="fw-bold mb-3">
-
-                            <i class="bi bi-info-circle-fill text-primary me-2"></i>
-
-                            Tổng quan
-
-                        </h6>
-
-
-                        <div class="mb-3">
-
-                            <small class="text-muted d-block">
-
-                                Tổng số dự đoán
-
-                            </small>
-
-                            <h4 class="fw-bold mb-0">
-
-                                {{ total_prediction|default(0) }}
-
-                            </h4>
-
-                        </div>
-
-
-                        <hr>
-
-
-                        <div class="mb-3">
-
-                            <small class="text-muted d-block">
-
-                                Điểm đánh giá trung bình
-
-                            </small>
-
-                            <h4 class="fw-bold text-warning mb-0">
-
-                                ⭐ {{ average_rating|default(0) }}
-
-                            </h4>
-
-                        </div>
-
-
-                        <hr>
-
-
-                        <div>
-
-                            <small class="text-muted d-block">
-
-                                Độ chính xác mô hình
-
-                            </small>
-
-                            <h4 class="fw-bold text-success mb-0">
-
-                                {{ accuracy|default(0) }}%
-
-                            </h4>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= FOOTER ================= -->
-
-        <div class="card-footer bg-white border-0 px-4 pb-4">
-
-            <div class="d-flex align-items-center text-muted small">
-
-                <i class="bi bi-lightbulb-fill text-warning me-2"></i>
-
-                <span>
-
-                    Biểu đồ giúp theo dõi sự phân bố các mức xếp hạng
-                    mà hệ thống AI dự đoán.
-
-                </span>
-
-            </div>
+            <canvas id="ratingChart"></canvas>
 
         </div>
 

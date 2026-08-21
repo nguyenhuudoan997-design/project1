@@ -1,5 +1,11 @@
 {% extends "layout.html" %}
 
+
+{% block title %}
+    AI Rating Predictor
+{% endblock %}
+
+
 {% block content %}
 
 <div class="container py-4">
@@ -12,7 +18,7 @@
 
         <h2 class="fw-bold">
 
-            <i class="bi bi-cpu"></i>
+            <i class="bi bi-cpu text-primary"></i>
 
             AI Rating Predictor
 
@@ -20,12 +26,126 @@
 
         <p class="text-muted">
 
-            Enter application information to predict
-            its Rating.
+            Nhập thông tin ứng dụng để hệ thống AI
+            dự đoán Rating.
 
         </p>
 
     </div>
+
+
+    <!-- =========================
+         ERROR
+    ========================== -->
+
+    {% if error %}
+
+    <div
+        class="alert alert-danger alert-dismissible fade show shadow-sm"
+        role="alert"
+    >
+
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+
+        <strong>Lỗi:</strong>
+
+        {{ error }}
+
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+        ></button>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         PREDICTION RESULT
+    ========================== -->
+
+    {% if prediction_text is not none %}
+
+    <div class="card border-0 shadow-sm mb-4">
+
+        <div class="card-body text-center py-4">
+
+            <div class="mb-2">
+
+                <i
+                    class="bi bi-stars text-warning"
+                    style="font-size: 40px;"
+                ></i>
+
+            </div>
+
+            <h5 class="text-muted mb-2">
+
+                Rating dự đoán
+
+            </h5>
+
+            <div
+                class="display-3 fw-bold text-primary"
+            >
+
+                {{ "%.2f"|format(prediction_text) }}
+
+                <small class="fs-4 text-muted">
+                    / 5.0
+                </small>
+
+            </div>
+
+            {% if prediction_text >= 4.5 %}
+
+                <span class="badge bg-success mt-2 px-3 py-2">
+
+                    <i class="bi bi-star-fill me-1"></i>
+
+                    Ứng dụng có đánh giá rất tốt
+
+                </span>
+
+            {% elif prediction_text >= 4.0 %}
+
+                <span class="badge bg-primary mt-2 px-3 py-2">
+
+                    <i class="bi bi-star-fill me-1"></i>
+
+                    Ứng dụng có đánh giá tốt
+
+                </span>
+
+            {% elif prediction_text >= 3.0 %}
+
+                <span class="badge bg-warning text-dark mt-2 px-3 py-2">
+
+                    <i class="bi bi-star-fill me-1"></i>
+
+                    Đánh giá khá
+
+                </span>
+
+            {% else %}
+
+                <span class="badge bg-danger mt-2 px-3 py-2">
+
+                    <i class="bi bi-star-fill me-1"></i>
+
+                    Đánh giá thấp
+
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endif %}
 
 
     <!-- =========================
@@ -38,9 +158,9 @@
 
             <h5 class="mb-0">
 
-                <i class="bi bi-input-cursor-text"></i>
+                <i class="bi bi-input-cursor-text me-2"></i>
 
-                Application Information
+                Thông tin ứng dụng
 
             </h5>
 
@@ -74,12 +194,13 @@
                             min="0"
                             step="1"
                             required
-                            placeholder="Example: 10000"
+                            placeholder="Ví dụ: 10000"
+                            value="{{ form_data.reviews }}"
                         >
 
                         <small class="text-muted">
 
-                            Number of user reviews.
+                            Số lượng đánh giá của người dùng.
 
                         </small>
 
@@ -103,12 +224,13 @@
                             min="0"
                             step="1"
                             required
-                            placeholder="Example: 100000"
+                            placeholder="Ví dụ: 100000"
+                            value="{{ form_data.installs }}"
                         >
 
                         <small class="text-muted">
 
-                            Number of installations.
+                            Số lượt cài đặt ứng dụng.
 
                         </small>
 
@@ -131,13 +253,13 @@
                             class="form-control"
                             min="0"
                             step="0.01"
-                            value="0"
+                            value="{{ form_data.price }}"
                             required
                         >
 
                         <small class="text-muted">
 
-                            Enter 0 for a free application.
+                            Nhập 0 nếu ứng dụng miễn phí.
 
                         </small>
 
@@ -161,12 +283,13 @@
                             min="0"
                             step="0.1"
                             required
-                            placeholder="Example: 20"
+                            placeholder="Ví dụ: 20"
+                            value="{{ form_data.size }}"
                         >
 
                         <small class="text-muted">
 
-                            Application size in MB.
+                            Kích thước ứng dụng tính bằng MB.
 
                         </small>
 
@@ -183,11 +306,12 @@
 
                     <button
                         type="submit"
-                        class="btn btn-primary px-4">
+                        class="btn btn-primary px-4"
+                    >
 
-                        <i class="bi bi-magic"></i>
+                        <i class="bi bi-magic me-1"></i>
 
-                        Predict Rating
+                        Dự đoán Rating
 
                     </button>
 
@@ -206,12 +330,12 @@
 
     <div class="alert alert-info mt-4">
 
-        <i class="bi bi-info-circle"></i>
+        <i class="bi bi-info-circle-fill me-2"></i>
 
-        The AI model uses four features:
+        Mô hình AI sử dụng 4 đặc trưng:
 
         <strong>
-            Reviews, Installs, Price and Size.
+            Reviews, Installs, Price và Size.
         </strong>
 
     </div>

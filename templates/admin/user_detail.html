@@ -1,0 +1,370 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Chi tiết người dùng
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+
+    <div class="mb-4">
+
+        <a
+            href="{{ url_for('admin.users') }}"
+            class="btn btn-outline-secondary btn-sm mb-3"
+        >
+
+            <i class="bi bi-arrow-left me-1"></i>
+
+            Quay lại
+
+        </a>
+
+        <h2 class="fw-bold">
+
+            <i class="bi bi-person-circle text-primary me-2"></i>
+
+            Chi tiết người dùng
+
+        </h2>
+
+    </div>
+
+
+    <!-- USER INFO -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body text-center py-4">
+
+                    <div
+                        class="rounded-circle
+                               bg-primary
+                               bg-opacity-10
+                               text-primary
+                               mx-auto
+                               d-flex
+                               align-items-center
+                               justify-content-center"
+                        style="
+                            width:90px;
+                            height:90px;
+                        "
+                    >
+
+                        <i class="bi bi-person-fill fs-1"></i>
+
+                    </div>
+
+                    <h4 class="fw-bold mt-3">
+
+                        {{ user.username }}
+
+                    </h4>
+
+                    <p class="text-muted">
+
+                        ID: {{ user.id }}
+
+                    </p>
+
+
+                    {% if user.role == "Admin" %}
+
+                        <span class="badge bg-danger">
+
+                            Admin
+
+                        </span>
+
+                    {% elif user.role == "Developer" %}
+
+                        <span class="badge bg-dark">
+
+                            Developer
+
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-primary">
+
+                            User
+
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ROLE -->
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-shield me-2"></i>
+
+                        Quản lý quyền
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <form
+                        method="POST"
+                        action="{{ url_for(
+                            'admin.change_role',
+                            user_id=user.id
+                        ) }}"
+                    >
+
+                        <label class="form-label fw-semibold">
+
+                            Quyền hiện tại
+
+                        </label>
+
+                        <select
+                            name="role"
+                            class="form-select mb-3"
+                        >
+
+                            <option
+                                value="User"
+                                {% if user.role == "User" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                User
+
+                            </option>
+
+                            <option
+                                value="Developer"
+                                {% if user.role == "Developer" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Developer
+
+                            </option>
+
+                            <option
+                                value="Admin"
+                                {% if user.role == "Admin" %}
+                                    selected
+                                {% endif %}
+                            >
+
+                                Admin
+
+                            </option>
+
+                        </select>
+
+
+                        {% if user.id == session.get("user_id") %}
+
+                            <div class="alert alert-warning">
+
+                                Bạn đang đăng nhập bằng tài khoản này.
+
+                                Không thể thay đổi quyền của chính mình.
+
+                            </div>
+
+                        {% else %}
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+
+                                <i class="bi bi-check-circle me-1"></i>
+
+                                Cập nhật quyền
+
+                            </button>
+
+                        {% endif %}
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREDICTIONS -->
+
+    <div class="card border-0 shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+
+                <i class="bi bi-clock-history me-2"></i>
+
+                Lịch sử dự đoán
+
+            </h5>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Reviews</th>
+
+                        <th>Installs</th>
+
+                        <th>Price</th>
+
+                        <th>Size</th>
+
+                        <th>Rating</th>
+
+                        <th>Thời gian</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                {% for item in predictions %}
+
+                    <tr>
+
+                        <td>
+
+                            #{{ item.id }}
+
+                        </td>
+
+                        <td>
+
+                            {{ "{:,.0f}".format(
+                                item.reviews
+                            ) }}
+
+                        </td>
+
+                        <td>
+
+                            {{ "{:,.0f}".format(
+                                item.installs
+                            ) }}
+
+                        </td>
+
+                        <td>
+
+                            ${{ "%.2f".format(
+                                item.price
+                            ) }}
+
+                        </td>
+
+                        <td>
+
+                            {{ "%.1f".format(
+                                item.size
+                            ) }} MB
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-success">
+
+                                ⭐ {{ "%.2f".format(
+                                    item.rating
+                                ) }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            {% if item.created_at %}
+
+                                {{ item.created_at.strftime(
+                                    "%d/%m/%Y %H:%M"
+                                ) }}
+
+                            {% else %}
+
+                                --
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="text-center
+                                   text-muted
+                                   py-4"
+                        >
+
+                            Người dùng chưa có dự đoán.
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

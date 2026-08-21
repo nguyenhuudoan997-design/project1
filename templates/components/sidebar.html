@@ -1,0 +1,298 @@
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <!-- SIDEBAR PROFILE -->
+    <div class="sidebar-profile">
+
+        <div class="sidebar-avatar">
+            <i class="bi bi-person-fill"></i>
+        </div>
+
+        <h5 class="mb-1">
+            {{ session.get("user", "Guest") }}
+        </h5>
+
+        <span class="sidebar-role">
+            {{ session.get("role", "User") }}
+        </span>
+
+    </div>
+
+
+    <!-- USER MENU -->
+    <div class="sidebar-title">
+
+        <i class="bi bi-grid me-1"></i>
+
+        MENU
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <a
+        href="{{ url_for('dashboard.dashboard') }}"
+        class="sidebar-link
+        {% if request.endpoint == 'dashboard.dashboard' %}
+            active
+        {% endif %}"
+    >
+
+        <span>
+
+            <i class="bi bi-speedometer2"></i>
+
+            Bảng điều khiển
+
+        </span>
+
+    </a>
+
+
+    <!-- PREDICTION -->
+    <a
+        href="{{ url_for('predict.predict') }}"
+        class="sidebar-link
+        {% if request.endpoint == 'predict.predict' %}
+            active
+        {% endif %}"
+    >
+
+        <span>
+
+            <i class="bi bi-stars"></i>
+
+            Dự đoán xếp hạng
+
+        </span>
+
+        <span class="menu-badge">
+            AI
+        </span>
+
+    </a>
+
+
+    <!-- HISTORY -->
+    <a
+        href="{{ url_for('history.history') }}"
+        class="sidebar-link
+        {% if request.endpoint == 'history.history' %}
+            active
+        {% endif %}"
+    >
+
+        <span>
+
+            <i class="bi bi-clock-history"></i>
+
+            Lịch sử dự đoán
+
+        </span>
+
+    </a>
+
+
+    <!-- ANALYTICS -->
+    <a
+        href="{{ url_for('analytics.analytics') }}"
+        class="sidebar-link
+        {% if request.endpoint == 'analytics.analytics' %}
+            active
+        {% endif %}"
+    >
+
+        <span>
+
+            <i class="bi bi-bar-chart-line"></i>
+
+            Phân tích dữ liệu
+
+        </span>
+
+    </a>
+
+
+    <!-- PROFILE -->
+    <a
+        href="{{ url_for('profile.profile') }}"
+        class="sidebar-link
+        {% if request.endpoint == 'profile.profile' %}
+            active
+        {% endif %}"
+    >
+
+        <span>
+
+            <i class="bi bi-person"></i>
+
+            Hồ sơ cá nhân
+
+        </span>
+
+    </a>
+
+
+    <!-- =================================================
+         ADMIN
+    ================================================== -->
+
+    {% if session.get("role") == "Admin" %}
+
+        <div class="sidebar-title admin-section-title">
+
+            <i class="bi bi-shield-lock me-1"></i>
+
+            QUẢN TRỊ HỆ THỐNG
+
+        </div>
+
+
+        <!-- ADMIN DASHBOARD -->
+        <a
+            href="{{ url_for('admin.admin_dashboard') }}"
+            class="sidebar-link admin-link
+            {% if request.endpoint == 'admin.admin_dashboard' %}
+                active
+            {% endif %}"
+        >
+
+            <span>
+
+                <i class="bi bi-speedometer2"></i>
+
+                Tổng quan hệ thống
+
+            </span>
+
+        </a>
+
+
+        <!-- USERS -->
+        <a
+            href="{{ url_for('admin.users') }}"
+            class="sidebar-link admin-link
+            {% if request.endpoint in [
+                'admin.users',
+                'admin.user_detail'
+            ] %}
+                active
+            {% endif %}"
+        >
+
+            <span>
+
+                <i class="bi bi-people"></i>
+
+                Quản lý người dùng
+
+            </span>
+
+        </a>
+
+
+        <!-- PREDICTIONS -->
+        <a
+            href="{{ url_for('admin.predictions') }}"
+            class="sidebar-link admin-link
+            {% if request.endpoint == 'admin.predictions' %}
+                active
+            {% endif %}"
+        >
+
+            <span>
+
+                <i class="bi bi-clock-history"></i>
+
+                Toàn bộ lịch sử dự đoán
+
+            </span>
+
+        </a>
+
+
+        <!-- RETRAIN -->
+        <a
+            href="{{ url_for('admin.admin_retrain') }}"
+            class="sidebar-link admin-link
+            {% if request.endpoint == 'admin.admin_retrain' %}
+                active
+            {% endif %}"
+        >
+
+            <span>
+
+                <i class="bi bi-cpu"></i>
+
+                Huấn luyện lại mô hình
+
+            </span>
+
+        </a>
+
+    {% endif %}
+
+
+    <!-- =================================================
+         DEVELOPER
+    ================================================== -->
+
+    {% if session.get("role") == "Developer" %}
+
+        <div class="sidebar-title developer-section-title">
+
+            <i class="bi bi-code-slash me-1"></i>
+
+            NHÀ PHÁT TRIỂN
+
+        </div>
+
+
+        <div class="developer-info">
+
+            <i class="bi bi-code-square"></i>
+
+            <div>
+
+                <strong>
+                    Chế độ nhà phát triển
+                </strong>
+
+                <small>
+                    Khu vực phát triển hệ thống
+                </small>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+
+    <!-- =================================================
+         BOTTOM
+    ================================================== -->
+
+    <div class="sidebar-bottom">
+
+        <a
+            href="{{ url_for('auth.logout') }}"
+            class="sidebar-link logout-link"
+        >
+
+            <span>
+
+                <i class="bi bi-box-arrow-right"></i>
+
+                Đăng xuất
+
+            </span>
+
+        </a>
+
+    </div>
+
+</aside>

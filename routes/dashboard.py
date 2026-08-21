@@ -4,6 +4,7 @@ from flask import session
 
 from services.prediction_service import PredictionService
 
+
 dashboard_bp = Blueprint(
     "dashboard",
     __name__
@@ -13,40 +14,196 @@ dashboard_bp = Blueprint(
 @dashboard_bp.route("/dashboard")
 def dashboard():
 
-    username = session.get("user", "Khách")
+    # ==================================================
+    # USER INFORMATION
+    # ==================================================
 
-    total_prediction = PredictionService.get_total_predictions()
+    username = session.get(
+        "user",
+        "Khách"
+    )
 
-    average_rating = PredictionService.get_average_rating()
+    user_id = session.get(
+        "user_id"
+    )
 
-    accuracy = PredictionService.get_prediction_accuracy()
+    role = session.get(
+        "role",
+        "User"
+    )
 
-    pagination = PredictionService.get_predictions_paginated(
-        page=1,
-        per_page=10
+    # ==================================================
+    # DETERMINE DATA SCOPE
+    # ==================================================
+    #
+    # User:
+    #     Chỉ xem dữ liệu của chính mình.
+    #
+    # Admin / Developer:
+    #     Xem dữ liệu toàn bộ hệ thống.
+    #
+    # ==================================================
+
+    if role in ["Admin", "Developer"]:
+
+        dashboard_user_id = None
+
+    else:
+
+        dashboard_user_id = user_id
+
+    # ==================================================
+    # STATISTICS
+    # ==================================================
+
+    total_prediction = (
+        PredictionService.get_total_predictions(
+            user_id=dashboard_user_id
+        )
+    )
+
+    average_rating = (
+        PredictionService.get_average_rating(
+            user_id=dashboard_user_id
+        )
+    )
+
+    accuracy = (
+        PredictionService.get_prediction_accuracy(
+            user_id=dashboard_user_id
+        )
+    )
+
+    # ==================================================
+    # HISTORY
+    # ==================================================
+
+    pagination = (
+        PredictionService.get_predictions_paginated(
+            page=1,
+            per_page=10,
+            user_id=dashboard_user_id
+        )
     )
 
     history = pagination.items
 
-    top_users = PredictionService.get_top_users()
+    # ==================================================
+    # TOP USERS
+    # ==================================================
 
-    rating_distribution = PredictionService.get_rating_distribution()
+    top_users = (
+        PredictionService.get_top_users(
+            limit=5
+        )
+    )
 
-    prediction_trend = PredictionService.get_prediction_trend()
+    # ==================================================
+    # RATING DISTRIBUTION
+    # ==================================================
 
-    trend_labels = [item.id for item in prediction_trend]
+    rating_distribution = (
+        PredictionService.get_rating_distribution(
+            user_id=dashboard_user_id
+        )
+    )
 
-    trend_values = [item.rating for item in prediction_trend]
+    rating_labels = [
+        str(item[0])
+        for item in rating_distribution
+    ]
 
-    rating_labels = [str(item[0]) for item in rating_distribution]
+    rating_values = [
+        item[1]
+        for item in rating_distribution
+    ]
 
-    rating_values = [item[1] for item in rating_distribution]
+    # ==================================================
+    # PREDICTION TREND
+    # ==================================================
+
+    prediction_trend = (
+        PredictionService.get_prediction_trend(
+            user_id=dashboard_user_id
+        )
+    )
+
+    trend_labels = [
+        str(index + 1)
+        for index, item in enumerate(
+            prediction_trend
+        )
+    ]
+
+    trend_values = [
+        float(item.rating)
+        for item in prediction_trend
+    ]
+
+    # ==================================================
+    # DEBUG
+    # ==================================================
+
+    print("================================")
+    print("DASHBOARD DATA")
+    print("================================")
+
+    print("Username:", username)
+    print("Role:", role)
+    print("User ID:", user_id)
+    print(
+        "Dashboard User ID:",
+        dashboard_user_id
+    )
+
+    print(
+        "Total predictions:",
+        total_prediction
+    )
+
+    print(
+        "Average rating:",
+        average_rating
+    )
+
+    print(
+        "Accuracy:",
+        accuracy
+    )
+
+    print(
+        "Trend labels:",
+        trend_labels
+    )
+
+    print(
+        "Trend values:",
+        trend_values
+    )
+
+    print(
+        "Rating labels:",
+        rating_labels
+    )
+
+    print(
+        "Rating values:",
+        rating_values
+    )
+
+    print("================================")
+
+    # ==================================================
+    # RENDER DASHBOARD
+    # ==================================================
 
     return render_template(
 
         "dashboard.html",
 
         user=username,
+
+        role=role,
 
         history=history,
 
@@ -71,5 +228,4 @@ def dashboard():
         keyword="",
 
         rating=""
-
     )

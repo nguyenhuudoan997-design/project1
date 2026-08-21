@@ -159,72 +159,86 @@
     </div>
 
 
-    <!-- ===================================== -->
-    <!-- ACCURACY -->
-    <!-- ===================================== -->
+   <!-- ===================================== -->
+<!-- ACCURACY -->
+<!-- ===================================== -->
 
-    <div class="col-xl-4 col-md-12">
+<div class="col-xl-4 col-md-12">
 
-        <div class="card dashboard-stat-card accuracy-stat-card
-                    border-0 shadow-sm h-100">
+    <div class="card dashboard-stat-card accuracy-stat-card
+                border-0 shadow-sm h-100">
 
-            <div class="card-body p-4">
+        <div class="card-body p-4">
 
-                <div class="d-flex justify-content-between align-items-start">
+            <div class="d-flex justify-content-between align-items-start">
 
-                    <div>
+                <div>
 
-                        <div class="stat-label">
+                    <div class="stat-label">
 
-                            <i class="bi bi-bullseye me-1"></i>
+                        <i class="bi bi-bullseye me-1"></i>
 
-                            Độ chính xác mô hình
-
-                        </div>
-
-
-                        <h2 class="stat-number text-warning">
-
-                            {{ accuracy|default(0) }}%
-
-                        </h2>
-
-
-                        <p class="stat-description">
-
-                            Mức độ chính xác của mô hình dự đoán.
-
-                        </p>
+                        Độ chính xác mô hình
 
                     </div>
 
 
-                    <div class="stat-icon stat-icon-warning">
+                    <h2 class="stat-number text-warning">
 
-                        <i class="bi bi-bullseye"></i>
+                        {% if accuracy is not none and accuracy > 0 %}
 
-                    </div>
+                            {{ "%.2f"|format(accuracy) }}%
+
+                        {% else %}
+
+                            Chưa có dữ liệu
+
+                        {% endif %}
+
+                    </h2>
+
+
+                    <p class="stat-description">
+
+                        {% if accuracy is not none and accuracy > 0 %}
+
+                            Độ chính xác ước tính dựa trên sai số dự đoán.
+
+                        {% else %}
+
+                            Chưa có dữ liệu thực tế để đánh giá mô hình.
+
+                        {% endif %}
+
+                    </p>
 
                 </div>
 
 
-                <div class="stat-footer">
+                <div class="stat-icon stat-icon-warning">
 
-                    <span>
-
-                        <i class="bi bi-cpu-fill"></i>
-
-                        Mô hình AI
-
-                    </span>
-
-                    <span class="text-warning fw-semibold">
-
-                        Random Forest
-
-                    </span>
+                    <i class="bi bi-bullseye"></i>
 
                 </div>
+
+            </div>
+
+
+            <div class="stat-footer">
+
+                <span>
+
+                    <i class="bi bi-cpu-fill"></i>
+
+                    Mô hình AI
+
+                </span>
+
+                <span class="text-warning fw-semibold">
+
+                    Random Forest
+
+                </span>
 
             </div>
 

@@ -46,8 +46,20 @@ def predict():
             url_for("auth.login")
         )
 
+    # --------------------------------------
+    # DEFAULT VALUES
+    # --------------------------------------
+
     prediction_text = None
     error = None
+
+    # Dữ liệu giữ lại trên form
+    form_data = {
+        "reviews": "",
+        "installs": "",
+        "price": "0",
+        "size": ""
+    }
 
     # --------------------------------------
     # POST
@@ -57,32 +69,81 @@ def predict():
 
         try:
 
-            reviews = float(
-                request.form.get(
-                    "reviews",
-                    0
+            # ----------------------------------
+            # GET FORM DATA
+            # ----------------------------------
+
+            reviews_input = request.form.get(
+                "reviews",
+                ""
+            ).strip()
+
+            installs_input = request.form.get(
+                "installs",
+                ""
+            ).strip()
+
+            price_input = request.form.get(
+                "price",
+                "0"
+            ).strip()
+
+            size_input = request.form.get(
+                "size",
+                ""
+            ).strip()
+
+            # ----------------------------------
+            # SAVE FORM DATA
+            # ----------------------------------
+
+            form_data = {
+                "reviews": reviews_input,
+                "installs": installs_input,
+                "price": price_input,
+                "size": size_input
+            }
+
+            # ----------------------------------
+            # CHECK EMPTY
+            # ----------------------------------
+
+            if not reviews_input:
+
+                raise ValueError(
+                    "Vui lòng nhập số Reviews."
                 )
+
+            if not installs_input:
+
+                raise ValueError(
+                    "Vui lòng nhập số Installs."
+                )
+
+            if not size_input:
+
+                raise ValueError(
+                    "Vui lòng nhập kích thước ứng dụng."
+                )
+
+            # ----------------------------------
+            # CONVERT NUMBER
+            # ----------------------------------
+
+            reviews = float(
+                reviews_input
             )
 
             installs = float(
-                request.form.get(
-                    "installs",
-                    0
-                )
+                installs_input
             )
 
             price = float(
-                request.form.get(
-                    "price",
-                    0
-                )
+                price_input or 0
             )
 
             size = float(
-                request.form.get(
-                    "size",
-                    0
-                )
+                size_input
             )
 
             # ----------------------------------
@@ -154,16 +215,28 @@ def predict():
                 rating=rating
             )
 
+            # ----------------------------------
+            # RESULT
+            # ----------------------------------
+
             prediction_text = rating
 
             flash(
-                "Dự đoán đã được lưu thành công!",
+                "Dự đoán đã được thực hiện và lưu thành công!",
                 "success"
             )
+
+        # --------------------------------------
+        # VALUE ERROR
+        # --------------------------------------
 
         except ValueError as err:
 
             error = str(err)
+
+        # --------------------------------------
+        # OTHER ERROR
+        # --------------------------------------
 
         except Exception as err:
 
@@ -177,8 +250,20 @@ def predict():
 
     return render_template(
         "user/predict.html",
+
         prediction_text=prediction_text,
+
         error=error,
-        user=session.get("user"),
-        role=session.get("role")
+
+        form_data=form_data,
+
+        user=session.get(
+            "user",
+            "Khách"
+        ),
+
+        role=session.get(
+            "role",
+            "User"
+        )
     )
